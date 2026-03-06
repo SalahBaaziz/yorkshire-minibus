@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -13,12 +13,6 @@
 --background: 210 6% 96%;
 --foreground: 210 15% 12%;
 
---card: 0 0% 100%;
---card-foreground: 210 15% 12%;
-
---popover: 0 0% 100%;
---popover-foreground: 210 15% 12%;
-
 --primary: 170 28% 46%;
 --primary-foreground: 0 0% 100%;
 
@@ -28,166 +22,87 @@
 --muted: 210 8% 90%;
 --muted-foreground: 210 10% 40%;
 
---accent: 170 28% 46%;
---accent-foreground: 0 0% 100%;
-
---destructive: 0 70% 50%;
---destructive-foreground: 0 0% 100%;
-
 --border: 210 12% 85%;
 --input: 210 12% 85%;
 --ring: 170 28% 46%;
 
---radius: 0.75rem;
+/* NAV / HERO DARK */
 
-/* NAV / HERO */
-
---navy: 210 10% 18%;
---navy-dark: 210 12% 12%;
---navy-light: 210 8% 28%;
+--navy: 210 12% 16%;
+--navy-dark: 210 12% 10%;
+--navy-light: 210 8% 26%;
 
 /* TEAL ACCENT */
 
---gold: 170 28% 46%;
---gold-light: 170 32% 54%;
---gold-dark: 170 30% 36%;
+--gold: 168 32% 45%;
+--gold-light: 168 36% 52%;
+--gold-dark: 168 34% 35%;
 
 /* TYPOGRAPHY */
 
---font-sans: 'Inter', system-ui, sans-serif;
---font-serif: 'Playfair Display', Georgia, serif;
+--font-body: "DM Sans", sans-serif;
+--font-heading: "Playfair Display", serif;
 
---text-xs: 0.75rem;
---text-sm: 0.875rem;
---text-base: 1rem;
---text-lg: 1.125rem;
---text-xl: 1.25rem;
---text-2xl: 1.5rem;
---text-3xl: 2rem;
---text-4xl: 2.75rem;
---text-5xl: 3.5rem;
+/* FONT SIZES (match screenshot) */
 
-/* SHADOWS */
+--text-xs: 12px;
+--text-sm: 14px;
+--text-base: 16px;
+--text-lg: 18px;
+--text-xl: 20px;
 
---shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
---shadow: 0 2px 6px rgb(0 0 0 / 0.08);
---shadow-lg: 0 10px 25px rgb(0 0 0 / 0.12);
+--hero-title: 68px;
+--section-title: 40px;
 
 }
 
-.dark {
-
---background: 210 12% 12%;
---foreground: 0 0% 96%;
-
---card: 210 12% 14%;
---card-foreground: 0 0% 96%;
-
---popover: 210 12% 16%;
---popover-foreground: 0 0% 96%;
-
---primary: 170 32% 54%;
---primary-foreground: 0 0% 100%;
-
---secondary: 210 8% 28%;
---secondary-foreground: 0 0% 96%;
-
---muted: 210 8% 28%;
---muted-foreground: 210 10% 70%;
-
---accent: 170 28% 46%;
---accent-foreground: 0 0% 100%;
-
---border: 210 10% 24%;
---input: 210 10% 24%;
---ring: 170 32% 54%;
-
-}
+/* GLOBAL */
 
 * {
 @apply border-border;
 }
 
-html {
-font-size: 16px;
-}
-
 body {
 @apply bg-background text-foreground;
-font-family: var(--font-sans);
+font-family: var(--font-body);
 font-size: var(--text-base);
 line-height: 1.6;
-font-weight: 400;
 }
 
-/* HEADINGS MATCH HERO STYLE */
+/* HEADINGS */
 
 h1 {
-font-family: var(--font-serif);
-font-size: var(--text-5xl);
+font-family: var(--font-heading);
+font-size: var(--hero-title);
 font-weight: 600;
-line-height: 1.2;
+line-height: 1.15;
 letter-spacing: -0.02em;
 }
 
 h2 {
-font-family: var(--font-serif);
-font-size: var(--text-4xl);
-font-weight: 600;
-line-height: 1.25;
-}
-
-h3 {
-font-family: var(--font-serif);
-font-size: var(--text-3xl);
+font-family: var(--font-heading);
+font-size: var(--section-title);
 font-weight: 600;
 }
 
-h4 {
-font-family: var(--font-serif);
-font-size: var(--text-2xl);
-font-weight: 500;
-}
-
-h5 {
-font-family: var(--font-serif);
-font-size: var(--text-xl);
-font-weight: 500;
-}
-
-h6 {
-font-family: var(--font-serif);
-font-size: var(--text-lg);
-font-weight: 500;
-}
-
-p {
-font-size: var(--text-base);
-color: hsl(var(--muted-foreground));
+h3,h4,h5,h6 {
+font-family: var(--font-heading);
 }
 
 /* NAVBAR */
 
 nav {
-font-family: var(--font-sans);
+font-family: var(--font-body);
 font-size: var(--text-sm);
 font-weight: 500;
 letter-spacing: 0.04em;
 }
 
-/* BUTTONS */
+/* HERO LABEL */
 
-button {
-font-family: var(--font-sans);
-font-weight: 500;
-font-size: var(--text-sm);
-}
-
-/* HERO SUBTITLE */
-
-.hero-subtitle {
-font-size: var(--text-sm);
-letter-spacing: 0.15em;
+.hero-label {
+font-size: 13px;
+letter-spacing: 0.2em;
 text-transform: uppercase;
 font-weight: 600;
 color: hsl(var(--gold));
@@ -200,36 +115,30 @@ font-size: var(--text-lg);
 color: rgb(255 255 255 / 0.85);
 }
 
+/* BUTTONS */
+
+button {
+font-family: var(--font-body);
+font-weight: 500;
+font-size: var(--text-sm);
+padding: 12px 22px;
+border-radius: 8px;
 }
+
+}
+
+/* UTILITIES */
 
 @layer utilities {
 
 .bg-navy { background-color: hsl(var(--navy)); }
 .bg-navy-dark { background-color: hsl(var(--navy-dark)); }
-.bg-navy-light { background-color: hsl(var(--navy-light)); }
-
-.text-navy { color: hsl(var(--navy)); }
 
 .bg-gold { background-color: hsl(var(--gold)); }
-.bg-gold-light { background-color: hsl(var(--gold-light)); }
-.bg-gold-dark { background-color: hsl(var(--gold-dark)); }
-
 .text-gold { color: hsl(var(--gold)); }
-.text-gold-light { color: hsl(var(--gold-light)); }
 
-.fill-gold { fill: hsl(var(--gold)); }
-
-.bg-navy\/70 { background-color: hsl(var(--navy) / 0.70); }
-.bg-navy\/80 { background-color: hsl(var(--navy) / 0.80); }
-
-.bg-gold\/10 { background-color: hsl(var(--gold) / 0.10); }
-.bg-gold\/20 { background-color: hsl(var(--gold) / 0.20); }
-
-.border-gold\/30 { border-color: hsl(var(--gold) / 0.30); }
-
-.hover\:bg-gold-light:hover { background-color: hsl(var(--gold-light)); }
-.hover\:text-gold:hover { color: hsl(var(--gold)); }
-
-.focus\:ring-gold\/50:focus { --tw-ring-color: hsl(var(--gold) / 0.50); }
+.hover\:bg-gold-light:hover {
+background-color: hsl(var(--gold-light));
+}
 
 }
