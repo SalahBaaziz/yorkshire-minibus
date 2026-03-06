@@ -70,6 +70,7 @@ const EnquiryForm = () => {
 
 
 
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["About You", "Journey", "Locations", "Date & Time", "Extras"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -111,7 +112,7 @@ const EnquiryForm = () => {
             </div>)}
         </div>
 
-        <div className="rounded-xl border border-navy-light/30 p-8 bg-gold-light">
+        <div className="rounded-xl border border-navy-light/30 p-8 bg-muted">
           {/* Step 1: About You */}
           {step === 1 && <div className="space-y-5">
               <div>
@@ -142,8 +143,7 @@ const EnquiryForm = () => {
                 <label className={labelClass}>Journey Type</label>
                 <select className={inputClass} value={formData.journeyType} onChange={(e) => update("journeyType", e.target.value)}>
                   <option value="">Select a journey type</option>
-                  {journeyTypes.map((t) =>
-              <option key={t} value={t}>{t}</option>
+                  {journeyTypes.map((t) => <option key={t} value={t}>{t}</option>
               )}
                 </select>
               </div>
