@@ -1,24 +1,24 @@
 import { useState } from "react";
 
 const journeyTypes = [
-  "Wedding",
-  "Airport Transfer",
-  "Corporate",
-  "School Trip",
-  "Night Out",
-  "Other"
-];
+"Wedding",
+"Airport Transfer",
+"Corporate",
+"School Trip",
+"Night Out",
+"Other"];
+
 
 const passengerRanges = ["1–4", "5–8", "9–12", "13–16", "Not sure yet"];
 
 const pickupTimeRanges = [
-  "Early Morning (05:00 – 08:00)",
-  "Morning (08:00 – 12:00)",
-  "Afternoon (12:00 – 17:00)",
-  "Evening (17:00 – 21:00)",
-  "Late Night (21:00 – 00:00)",
-  "Overnight (00:00 – 05:00)"
-];
+"Early Morning (05:00 – 08:00)",
+"Morning (08:00 – 12:00)",
+"Afternoon (12:00 – 17:00)",
+"Evening (17:00 – 21:00)",
+"Late Night (21:00 – 00:00)",
+"Overnight (00:00 – 05:00)"];
+
 
 const EnquiryForm = () => {
   const [step, setStep] = useState(1);
@@ -59,12 +59,12 @@ const EnquiryForm = () => {
   };
 
   const stepLabels = [
-    "Journey",
-    "Locations",
-    "Date & Time",
-    "Extras",
-    "About You"
-  ];
+  "Journey",
+  "Locations",
+  "Date & Time",
+  "Extras",
+  "About You"];
+
 
   if (submitted) {
     return (
@@ -82,15 +82,15 @@ const EnquiryForm = () => {
             </p>
           </div>
         </div>
-      </section>
-    );
+      </section>);
+
   }
 
   const inputClass =
-    "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
+  "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
 
   const labelClass =
-    "block text-sm font-medium text-primary-foreground/80 mb-1.5";
+  "block text-sm font-medium text-primary-foreground/80 mb-1.5";
 
   return (
     <section id="enquiry" className="py-20 lg:py-28 bg-stone-300">
@@ -108,17 +108,17 @@ const EnquiryForm = () => {
         </div>
 
         <div className="flex items-center justify-center gap-2 mb-10">
-          {stepLabels.map((label, i) => (
-            <div key={i} className="flex items-center gap-2">
+          {stepLabels.map((label, i) =>
+          <div key={i} className="flex items-center gap-2">
               <div
-                className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-                  step === i + 1
-                    ? "bg-gold text-navy"
-                    : step > i + 1
-                    ? "bg-gold/30 text-gold"
-                    : "bg-navy-light/30 text-primary-foreground/40"
-                }`}
-              >
+              className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
+              step === i + 1 ?
+              "bg-gold text-navy" :
+              step > i + 1 ?
+              "bg-gold/30 text-gold" :
+              "bg-navy-light/30 text-primary-foreground/40"}`
+              }>
+              
                 {i + 1}
               </div>
 
@@ -126,18 +126,18 @@ const EnquiryForm = () => {
                 {label}
               </span>
 
-              {i < stepLabels.length - 1 && (
-                <div className="w-6 h-px bg-navy-light/30" />
-              )}
+              {i < stepLabels.length - 1 &&
+            <div className="w-6 h-px bg-navy-light/30" />
+            }
             </div>
-          ))}
+          )}
         </div>
 
         <div className="rounded-xl border border-navy-light/30 p-8 bg-gold-dark">
 
           {/* STEP 1 */}
-          {step === 1 && (
-            <div className="space-y-5">
+          {step === 1 &&
+          <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Journey Details
@@ -151,17 +151,17 @@ const EnquiryForm = () => {
                 <label className={labelClass}>What's the occasion?</label>
 
                 <select
-                  className={inputClass}
-                  value={formData.journeyType}
-                  onChange={(e) => update("journeyType", e.target.value)}
-                >
+                className={inputClass}
+                value={formData.journeyType}
+                onChange={(e) => update("journeyType", e.target.value)}>
+                
                   <option value="">Select a journey type</option>
 
-                  {journeyTypes.map((t) => (
-                    <option key={t} value={t}>
+                  {journeyTypes.map((t) =>
+                <option key={t} value={t}>
                       {t}
                     </option>
-                  ))}
+                )}
                 </select>
               </div>
 
@@ -169,25 +169,25 @@ const EnquiryForm = () => {
                 <label className={labelClass}>How many passengers?</label>
 
                 <select
-                  className={inputClass}
-                  value={formData.passengers}
-                  onChange={(e) => update("passengers", e.target.value)}
-                >
+                className={inputClass}
+                value={formData.passengers}
+                onChange={(e) => update("passengers", e.target.value)}>
+                
                   <option value="">Select a range</option>
 
-                  {passengerRanges.map((r) => (
-                    <option key={r} value={r}>
+                  {passengerRanges.map((r) =>
+                <option key={r} value={r}>
                       {r}
                     </option>
-                  ))}
+                )}
                 </select>
               </div>
             </div>
-          )}
+          }
 
           {/* STEP 2 */}
-          {step === 2 && (
-            <div className="space-y-5">
+          {step === 2 &&
+          <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Pick-up & Drop-off
@@ -202,33 +202,33 @@ const EnquiryForm = () => {
                 <label className={labelClass}>Pick-up location</label>
 
                 <input
-                  className={inputClass}
-                  placeholder="e.g. LS1 4AP or Leeds City Centre"
-                  value={formData.pickupPostcode}
-                  onChange={(e) =>
-                    update("pickupPostcode", e.target.value)
-                  }
-                />
+                className={inputClass}
+                placeholder="e.g. LS1 4AP or Leeds City Centre"
+                value={formData.pickupPostcode}
+                onChange={(e) =>
+                update("pickupPostcode", e.target.value)
+                } />
+              
               </div>
 
               <div>
                 <label className={labelClass}>Drop-off location</label>
 
                 <input
-                  className={inputClass}
-                  placeholder="e.g. HG1 1BB or Harrogate town centre"
-                  value={formData.dropoffPostcode}
-                  onChange={(e) =>
-                    update("dropoffPostcode", e.target.value)
-                  }
-                />
+                className={inputClass}
+                placeholder="e.g. HG1 1BB or Harrogate town centre"
+                value={formData.dropoffPostcode}
+                onChange={(e) =>
+                update("dropoffPostcode", e.target.value)
+                } />
+              
               </div>
             </div>
-          )}
+          }
 
           {/* STEP 3 */}
-          {step === 3 && (
-            <div className="space-y-5">
+          {step === 3 &&
+          <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   When Do You Need Us?
@@ -243,28 +243,28 @@ const EnquiryForm = () => {
                 <label className={labelClass}>Date of travel</label>
 
                 <input
-                  className={inputClass}
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => update("date", e.target.value)}
-                />
+                className={inputClass}
+                type="date"
+                value={formData.date}
+                onChange={(e) => update("date", e.target.value)} />
+              
               </div>
 
               <div>
                 <label className={labelClass}>Pick-up time</label>
 
                 <select
-                  className={inputClass}
-                  value={formData.time}
-                  onChange={(e) => update("time", e.target.value)}
-                >
+                className={inputClass}
+                value={formData.time}
+                onChange={(e) => update("time", e.target.value)}>
+                
                   <option value="">Select a time range</option>
 
-                  {pickupTimeRanges.map((t) => (
-                    <option key={t} value={t}>
+                  {pickupTimeRanges.map((t) =>
+                <option key={t} value={t}>
                       {t}
                     </option>
-                  ))}
+                )}
                 </select>
               </div>
 
@@ -275,51 +275,51 @@ const EnquiryForm = () => {
 
                 <div className="flex gap-4 mt-2">
                   <button
-                    type="button"
-                    onClick={() => setReturnJourney(true)}
-                    className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      returnJourney
-                        ? "bg-gold text-navy"
-                        : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"
-                    }`}
-                  >
+                  type="button"
+                  onClick={() => setReturnJourney(true)}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  returnJourney ?
+                  "bg-gold text-navy" :
+                  "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
+                  }>
+                  
                     Yes
                   </button>
 
                   <button
-                    type="button"
-                    onClick={() => setReturnJourney(false)}
-                    className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                      !returnJourney
-                        ? "bg-gold text-navy"
-                        : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"
-                    }`}
-                  >
+                  type="button"
+                  onClick={() => setReturnJourney(false)}
+                  className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  !returnJourney ?
+                  "bg-gold text-navy" :
+                  "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
+                  }>
+                  
                     No
                   </button>
                 </div>
               </div>
 
-              {returnJourney && (
-                <div>
+              {returnJourney &&
+            <div>
                   <label className={labelClass}>Return pick-up time</label>
 
                   <input
-                    className={inputClass}
-                    type="time"
-                    value={formData.returnTime}
-                    onChange={(e) =>
-                      update("returnTime", e.target.value)
-                    }
-                  />
+                className={inputClass}
+                type="time"
+                value={formData.returnTime}
+                onChange={(e) =>
+                update("returnTime", e.target.value)
+                } />
+              
                 </div>
-              )}
+            }
             </div>
-          )}
+          }
 
           {/* STEP 4 */}
-          {step === 4 && (
-            <div className="space-y-5">
+          {step === 4 &&
+          <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Anything Else?
@@ -336,18 +336,18 @@ const EnquiryForm = () => {
                 </label>
 
                 <textarea
-                  className={`${inputClass} min-h-[120px] resize-none`}
-                  placeholder="e.g. wheelchair access, child seats, extra luggage, specific route..."
-                  value={formData.notes}
-                  onChange={(e) => update("notes", e.target.value)}
-                />
+                className={`${inputClass} min-h-[120px] resize-none`}
+                placeholder="e.g. wheelchair access, child seats, extra luggage, specific route..."
+                value={formData.notes}
+                onChange={(e) => update("notes", e.target.value)} />
+              
               </div>
             </div>
-          )}
+          }
 
           {/* STEP 5 */}
-          {step === 5 && (
-            <div className="space-y-5 text-navy-light">
+          {step === 5 &&
+          <div className="space-y-5 text-navy-light">
               <div className="text-base">
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Almost Done!
@@ -364,13 +364,13 @@ const EnquiryForm = () => {
                 </label>
 
                 <input
-                  className={inputClass}
-                  placeholder="e.g. John Smith"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    update("fullName", e.target.value)
-                  }
-                />
+                className={inputClass}
+                placeholder="e.g. John Smith"
+                value={formData.fullName}
+                onChange={(e) =>
+                update("fullName", e.target.value)
+                } />
+              
               </div>
 
               <div>
@@ -379,14 +379,14 @@ const EnquiryForm = () => {
                 </label>
 
                 <input
-                  className={inputClass}
-                  type="email"
-                  placeholder="e.g. john@example.com"
-                  value={formData.email}
-                  onChange={(e) =>
-                    update("email", e.target.value)
-                  }
-                />
+                className={inputClass}
+                type="email"
+                placeholder="e.g. john@example.com"
+                value={formData.email}
+                onChange={(e) =>
+                update("email", e.target.value)
+                } />
+              
               </div>
 
               <div>
@@ -395,52 +395,52 @@ const EnquiryForm = () => {
                 </label>
 
                 <input
-                  className={inputClass}
-                  type="tel"
-                  placeholder="e.g. 07700 900000"
-                  value={formData.phone}
-                  onChange={(e) =>
-                    update("phone", e.target.value)
-                  }
-                />
+                className={inputClass}
+                type="tel"
+                placeholder="e.g. 07700 900000"
+                value={formData.phone}
+                onChange={(e) =>
+                update("phone", e.target.value)
+                } />
+              
               </div>
             </div>
-          )}
+          }
 
           {/* NAVIGATION */}
 
           <div className="mt-8 flex justify-between">
-            {step > 1 ? (
-              <button
-                onClick={() => setStep(step - 1)}
-                className="px-6 py-2.5 text-sm transition-colors bg-muted text-navy rounded-xl font-semibold border-0"
-              >
+            {step > 1 ?
+            <button
+              onClick={() => setStep(step - 1)}
+              className="px-6 py-2.5 text-sm transition-colors bg-muted text-navy rounded-xl font-semibold border-0">
+              
                 Back
-              </button>
-            ) : (
-              <div />
-            )}
+              </button> :
 
-            {step < 5 ? (
-              <button
-                onClick={() => setStep(step + 1)}
-                className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted"
-              >
+            <div />
+            }
+
+            {step < 5 ?
+            <button
+              onClick={() => setStep(step + 1)}
+              className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted">
+              
                 Next
-              </button>
-            ) : (
-              <button
-                onClick={handleSubmit}
-                className="rounded-lg bg-gold px-8 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light transition-colors"
-              >
+              </button> :
+
+            <button
+              onClick={handleSubmit}
+              className="px-8 py-2.5 text-sm font-semibold text-navy transition-colors bg-muted rounded-xl">
+              
                 Send Enquiry
               </button>
-            )}
+            }
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default EnquiryForm;
