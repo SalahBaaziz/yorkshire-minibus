@@ -1,37 +1,37 @@
 import { Heart, Plane, Briefcase, GraduationCap, PartyPopper, Car } from "lucide-react";
 
 const services = [
-  {
-    icon: Heart,
-    title: "Weddings",
-    description: "Make your big day seamless with elegant minibus transport for your guests. Punctual, stylish and stress-free.",
-  },
-  {
-    icon: Plane,
-    title: "Airport Transfers",
-    description: "Reliable pick-ups and drop-offs to all major airports including Leeds Bradford, Manchester and Doncaster.",
-  },
-  {
-    icon: Briefcase,
-    title: "Corporate Travel",
-    description: "Professional minibus hire for team events, conferences, meetings and company away days across Yorkshire.",
-  },
-  {
-    icon: GraduationCap,
-    title: "School & College Trips",
-    description: "Safe, DBS checked drivers for all school outings, sports fixtures and educational trips.",
-  },
-  {
-    icon: PartyPopper,
-    title: "Events & Nights Out",
-    description: "Enjoy your night worry-free. We handle the driving so your group can relax and have fun.",
-  },
-  {
-    icon: Car,
-    title: "Private Hire",
-    description: "Bespoke minibus hire for any occasion. Family gatherings, day trips, hen & stag dos — you name it.",
-  },
-];
+{
+  icon: Heart,
+  title: "Weddings",
+  description: "Make your big day seamless with elegant minibus transport for your guests. Punctual, stylish and stress-free."
+},
+{
+  icon: Plane,
+  title: "Airport Transfers",
+  description: "Reliable pick-ups and drop-offs to all major airports including Leeds Bradford, Manchester and Doncaster."
+},
+{
+  icon: Briefcase,
+  title: "Corporate Travel",
+  description: "Professional minibus hire for team events, conferences, meetings and company away days across Yorkshire."
+},
+{
+  icon: GraduationCap,
+  title: "School & College Trips",
+  description: "Safe, DBS checked drivers for all school outings, sports fixtures and educational trips."
+},
+{
+  icon: PartyPopper,
+  title: "Events & Nights Out",
+  description: "Enjoy your night worry-free. We handle the driving so your group can relax and have fun."
+},
+{
+  icon: Car,
+  title: "Private Hire",
+  description: "Bespoke minibus hire for any occasion. Family gatherings, day trips, hen & stag dos — you name it."
+}];
+
 
 const Services = () => {
   return (
@@ -49,12 +49,12 @@ const Services = () => {
           </p>
         </div>
         <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => (
-            <div
-              key={service.title}
-              className="group rounded-xl border border-border bg-card p-8 transition-all hover:shadow-lg hover:border-gold/30"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-lg bg-gold/10">
+          {services.map((service) =>
+          <div
+            key={service.title}
+            className="group rounded-xl border border-border p-8 transition-all hover:shadow-lg hover:border-gold/30 bg-primary-foreground text-navy-light">
+            
+              <div className="mb-5 h-12 w-12 items-center justify-center rounded-lg text-navy-dark flex flex-row bg-navy-light border-navy">
                 <service.icon className="h-6 w-6 text-gold" />
               </div>
               <h3 className="font-serif text-xl font-bold text-card-foreground">
@@ -64,11 +64,11 @@ const Services = () => {
                 {service.description}
               </p>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 };
 
 export default Services;
