@@ -58,6 +58,16 @@ const EnquiryForm = () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["About You", "Journey", "Locations", "Date & Time", "Extras"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -90,28 +100,18 @@ const EnquiryForm = () => {
         {/* Step indicators */}
         <div className="flex items-center justify-center gap-2 mb-10">
           {stepLabels.map((label, i) => <div key={i} className="flex items-center gap-2">
-              <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${
-            step === i + 1 ?
-            "bg-gold text-navy" :
-            step > i + 1 ?
-            "bg-gold/30 text-gold" :
-            "bg-navy-light/30 text-primary-foreground/40"}`
-            }>
+              <div className={`flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold ${step === i + 1 ? "bg-gold text-navy" : step > i + 1 ? "bg-gold/30 text-gold" : "bg-navy-light/30 text-primary-foreground/40"}`}>
               
                 {i + 1}
               </div>
               <span className="hidden sm:inline text-xs text-navy-dark">{label}</span>
-              {i < stepLabels.length - 1 &&
-            <div className="w-6 h-px bg-navy-light/30" />
-            }
-            </div>
-        )}
+              {i < stepLabels.length - 1 && <div className="w-6 h-px bg-navy-light/30" />}
+            </div>)}
         </div>
 
-        <div className="rounded-xl border border-navy-light/30 p-8 bg-accent">
+        <div className="rounded-xl border border-navy-light/30 p-8 bg-navy-light">
           {/* Step 1: About You */}
-          {step === 1 &&
-        <div className="space-y-5">
+          {step === 1 && <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-navy-dark">Your Details</h3>
                 <p className="text-sm mt-1 text-navy-light">So we know who to send the quote to.</p>
