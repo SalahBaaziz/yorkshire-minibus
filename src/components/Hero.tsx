@@ -20,13 +20,13 @@ Across Yorkshire
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="#enquiry"
-            className="rounded-lg bg-gold px-8 py-4 text-base font-semibold text-navy transition-colors hover:bg-gold-light">
+            className="bg-gold px-8 py-4 text-base font-semibold text-navy transition-colors hover:bg-gold-light rounded-xl">
             
             Book with us!  
           </a>
           <a
             href="#services"
-            className="rounded-lg border-2 border-primary-foreground/30 px-8 py-4 text-base font-semibold text-primary-foreground transition-colors hover:border-gold hover:text-gold">
+            className="border-2 border-primary-foreground/30 px-8 py-4 text-base font-semibold text-primary-foreground transition-colors hover:border-gold hover:text-gold rounded-xl">
             
             Our Services
           </a>
