@@ -81,6 +81,7 @@ const EnquiryForm = () => {
 
 
 
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["About You", "Journey", "Locations", "Date & Time", "Extras"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -134,7 +135,7 @@ const EnquiryForm = () => {
                 <input className={inputClass} placeholder="e.g. John Smith" value={formData.fullName} onChange={(e) => update("fullName", e.target.value)} />
               </div>
               <div>
-                <label className={labelClass}>Email Address</label>
+                <label className="">Email Address</label>
                 <input className={inputClass} type="email" placeholder="e.g. john@example.com" value={formData.email} onChange={(e) => update("email", e.target.value)} />
               </div>
               <div>
@@ -199,12 +200,11 @@ const EnquiryForm = () => {
                   
                     Yes
                   </button>
-                  <button
-                type="button"
-                onClick={() => setReturnJourney(false)}
-                className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                !returnJourney ? "bg-gold text-navy" : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
-                }>
+                  <button type="button"
+              onClick={() => setReturnJourney(false)}
+              className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              !returnJourney ? "bg-gold text-navy" : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
+              }>
                   
                     No
                   </button>
