@@ -86,6 +86,7 @@ const EnquiryForm = () => {
 
 
 
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["About You", "Journey", "Locations", "Date & Time", "Extras"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -132,7 +133,7 @@ const EnquiryForm = () => {
           {step === 1 && <div className="space-y-5 text-navy-light">
               <div className="text-base">
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">Your Details</h3>
-                <p className="text-sm mt-1 text-navy-light">So we know who to send the quote to.</p>
+                <p className="text-sm mt-1 text-navy-dark">So we know who to send the quote to.</p>
               </div>
               <div className="text-navy-light">
                 <label className="text-primary-foreground">Full Name</label>
@@ -210,8 +211,7 @@ const EnquiryForm = () => {
                   </button>
                 </div>
               </div>
-              {returnJourney &&
-          <div>
+              {returnJourney && <div>
                   <label className={labelClass}>Return Time</label>
                   <input className={inputClass} type="time" value={formData.returnTime} onChange={(e) => update("returnTime", e.target.value)} />
                 </div>
