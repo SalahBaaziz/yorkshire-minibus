@@ -71,6 +71,11 @@ const EnquiryForm = () => {
 
 
 
+
+
+
+
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["Journey", "Locations", "Date & Time", "Extras", "About You"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -115,22 +120,17 @@ const EnquiryForm = () => {
         <div className="rounded-xl border border-navy-light/30 p-8 bg-gold-dark">
 
           {/* Step 1: Journey */}
-          {step === 1 &&
-        <div className="space-y-5">
+          {step === 1 && <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">Journey Details</h3>
                 <p className="text-sm text-primary-foreground/60 mt-1">What kind of trip are you planning?</p>
               </div>
               <div>
                 <label className={labelClass}>What's the occasion?</label>
-                <select
-              className={inputClass}
-              value={formData.journeyType}
-              onChange={(e) => update("journeyType", e.target.value)}>
+                <select className={inputClass} value={formData.journeyType} onChange={(e) => update("journeyType", e.target.value)}>
                 
                   <option value="">Select a journey type</option>
-                  {journeyTypes.map((t) =>
-              <option key={t} value={t}>{t}</option>
+                  {journeyTypes.map((t) => <option key={t} value={t}>{t}</option>
               )}
                 </select>
               </div>
@@ -313,7 +313,7 @@ const EnquiryForm = () => {
             {step > 1 ?
           <button
             onClick={() => setStep(step - 1)}
-            className="rounded-lg border border-navy-light/30 px-6 py-2.5 text-sm font-medium text-primary-foreground/70 hover:border-gold/30 transition-colors">
+            className="border border-navy-light/30 px-6 py-2.5 text-sm hover:border-gold/30 transition-colors bg-muted text-navy rounded-xl font-semibold">
               
                 Back
               </button> :
