@@ -72,6 +72,10 @@ const EnquiryForm = () => {
 
 
 
+
+
+
+
       // silently handle - show success anyway per spec
     }setSubmitted(true);};const stepLabels = ["About You", "Journey", "Locations", "Date & Time", "Extras"];if (submitted) {return <section id="enquiry" className="bg-navy py-20 lg:py-28">
         <div className="mx-auto max-w-2xl px-6 text-center">
@@ -115,9 +119,9 @@ const EnquiryForm = () => {
 
         <div className="rounded-xl border border-navy-light/30 p-8 bg-navy-light">
           {/* Step 1: About You */}
-          {step === 1 && <div className="space-y-5">
-              <div>
-                <h3 className="font-serif text-lg font-bold text-navy-dark">Your Details</h3>
+          {step === 1 && <div className="space-y-5 text-navy-light">
+              <div className="text-base">
+                <h3 className="font-serif text-lg font-bold text-primary-foreground">Your Details</h3>
                 <p className="text-sm mt-1 text-navy-light">So we know who to send the quote to.</p>
               </div>
               <div>
@@ -151,12 +155,10 @@ const EnquiryForm = () => {
                 <label className={labelClass}>Number of Passengers</label>
                 <input className={inputClass} type="number" min="1" max="50" placeholder="e.g. 12" value={formData.passengers} onChange={(e) => update("passengers", e.target.value)} />
               </div>
-            </div>
-        }
+            </div>}
 
           {/* Step 3: Locations */}
-          {step === 3 &&
-        <div className="space-y-5">
+          {step === 3 && <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">Pick-up & Drop-off</h3>
                 <p className="text-sm text-primary-foreground/60 mt-1">Where are you travelling from and to?</p>
@@ -169,12 +171,10 @@ const EnquiryForm = () => {
                 <label className={labelClass}>Drop-off Postcode</label>
                 <input className={inputClass} placeholder="e.g. HG1 1BB" value={formData.dropoffPostcode} onChange={(e) => update("dropoffPostcode", e.target.value)} />
               </div>
-            </div>
-        }
+            </div>}
 
           {/* Step 4: Date & Time */}
-          {step === 4 &&
-        <div className="space-y-5">
+          {step === 4 && <div className="space-y-5">
               <div>
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">When Do You Need Us?</h3>
                 <p className="text-sm text-primary-foreground/60 mt-1">Pick a date and time for your journey.</p>
@@ -253,7 +253,7 @@ const EnquiryForm = () => {
             {step < 5 ?
           <button
             onClick={() => setStep(step + 1)}
-            className="rounded-lg bg-gold px-6 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light transition-colors">
+            className="bg-gold px-6 py-2.5 text-sm font-semibold text-navy hover:bg-gold-light transition-colors rounded-xl">
               
                 Next
               </button> :
