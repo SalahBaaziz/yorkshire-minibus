@@ -41,7 +41,7 @@ const Services = () => {
           <p className="text-sm font-semibold uppercase tracking-widest text-gold">
             What We Offer
           </p>
-          <h2 className="mt-3 font-serif text-3xl font-bold text-foreground sm:text-4xl">
+          <h2 className="mt-3 font-serif text-3xl text-foreground sm:text-4xl font-normal">
             Minibus Hire for Every Occasion
           </h2>
           <p className="mt-4 text-muted-foreground">

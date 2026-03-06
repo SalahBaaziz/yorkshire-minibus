@@ -29,7 +29,7 @@ const HowItWorks = () => {
           <p className="text-sm font-semibold uppercase tracking-widest text-gold">
             Easy as 1-2-3
           </p>
-          <h2 className="mt-3 font-serif text-3xl font-bold sm:text-4xl text-navy-dark">
+          <h2 className="mt-3 font-serif text-3xl sm:text-4xl text-navy-dark font-normal">
             How It Works
           </h2>
         </div>
