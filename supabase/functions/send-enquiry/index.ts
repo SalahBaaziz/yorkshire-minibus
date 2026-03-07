@@ -76,18 +76,18 @@ Deno.serve(async (req) => {
 <body>
   <div class="container">
     <div class="header">
-      <h1>🚐 New Minibus Enquiry</h1>
+      <h1>New Minibus Enquiry</h1>
     </div>
     <div class="body">
       <div class="section">
-        <h2>👤 Customer Details</h2>
+        <h2>Customer Details</h2>
         <div class="row"><span class="label">Name</span><span class="value">${fullName}</span></div>
         <div class="row"><span class="label">Email</span><span class="value">${email}</span></div>
         <div class="row"><span class="label">Phone</span><span class="value">${phone}</span></div>
       </div>
 
       <div class="section">
-        <h2>🚌 Journey Details</h2>
+        <h2>Journey Details</h2>
         <div class="row"><span class="label">Occasion</span><span class="value">${journeyType || "Not specified"}</span></div>
         <div class="row"><span class="label">Passengers</span><span class="value">${passengers || "Not specified"}</span></div>
         <div class="row"><span class="label">Date</span><span class="value">${date || "Not specified"}</span></div>
@@ -98,9 +98,7 @@ Deno.serve(async (req) => {
       <div class="section">
         <h2>📍 Route</h2>
         <div class="row"><span class="label">Pick-up</span><span class="value">${pickupAddress || "Not provided"}</span></div>
-        ${pickupCoords ? `<div class="row"><span class="label">Coordinates</span><span class="value">${pickupCoords.lat}, ${pickupCoords.lon}</span></div>` : ""}
         <div class="row"><span class="label">Drop-off</span><span class="value">${dropoffAddress || "Not provided"}</span></div>
-        ${dropoffCoords ? `<div class="row"><span class="label">Coordinates</span><span class="value">${dropoffCoords.lat}, ${dropoffCoords.lon}</span></div>` : ""}
       </div>
 
       <div class="highlight">
@@ -110,7 +108,7 @@ Deno.serve(async (req) => {
 
       ${notes ? `
       <div class="section" style="margin-top:20px">
-        <h2>📝 Additional Notes</h2>
+        <h2>Additional Notes</h2>
         <p style="color:#555">${notes}</p>
       </div>` : ""}
     </div>
