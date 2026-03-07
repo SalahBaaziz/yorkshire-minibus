@@ -1,8 +1,74 @@
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "authorisation, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+// ── Pricing helpers ────────────────────────────────────────────────────────────
+
+function passengersToNumber(passengerRange: string): number {
+  if (!passengerRange || passengerRange === "Not sure yet") return 8;
+  const match = passengerRange.match(/^(\d+)–(\d+)/);
+  return match ? parseInt(match[2]) : 8;
+}
+
+function extractTimePeriod(timeString: string): string {
+  if (!timeString) return "Afternoon";
+  const match = timeString.match(/^([A-Za-z\s]+?)\s*\(/);
+  return match ? match[1].trim() : "Afternoon";
+}
+
+function getTimePremium(timePeriod: string): number {
+  const premiums: { [key: string]: number } = {
+    "Morning": 1.0,
+    "Afternoon": 1.0,
+    "Early Morning": 1.1,
+    "Evening": 1.2,
+    "Late Night": 1.3,
+    "Overnight": 1.5,
+  };
+  return premiums[timePeriod] || 1.0;
+}
+
+function getJourneyTypePremium(journeyType: string): number {
+  const premiums: { [key: string]: number } = {
+    "Corporate": 1.0,
+    "School Trip": 1.0,
+    "Other": 1.0,
+    "Airport Transfer": 1.1,
+    "Wedding": 1.2,
+    "Night Out": 1.3,
+  };
+  return premiums[journeyType] || 1.0;
+}
+
+function calculatePrice(
+  distanceMiles: number,
+  passengers: string,
+  timeString: string,
+  journeyType: string
+): { finalPrice: number } | null {
+  if (!distanceMiles || distanceMiles <= 0) return null;
+  const people = passengersToNumber(passengers);
+  const timePremium = getTimePremium(extractTimePeriod(timeString));
+  const journeyPremium = getJourneyTypePremium(journeyType);
+  const fairPrice = (people / 16) * distanceMiles * 5 * timePremium * journeyPremium;
+  const minimumCharge = distanceMiles * (10 / 3);
+  const finalPrice = Math.max(fairPrice, minimumCharge);
+  return { finalPrice: Math.round(finalPrice * 100) / 100 };
+}
+
+// ── Utilities ──────────────────────────────────────────────────────────────────
+
+const formatDuration = (mins: number) => {
+  if (!mins) return "Not calculated";
+  if (mins < 60) return `${mins} minutes`;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m > 0 ? `${h}h ${m}min` : `${h}h`;
+};
+
+// ── Edge function ──────────────────────────────────────────────────────────────
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -11,16 +77,11 @@ Deno.serve(async (req) => {
 
   try {
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) {
-      throw new Error("RESEND_API_KEY is not configured");
-    }
+    if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY is not configured");
 
     const BUSINESS_EMAIL = Deno.env.get("BUSINESS_EMAIL");
-    if (!BUSINESS_EMAIL) {
-      throw new Error("BUSINESS_EMAIL is not configured");
-    }
+    if (!BUSINESS_EMAIL) throw new Error("BUSINESS_EMAIL is not configured");
 
-    const body = await req.json();
     const {
       fullName,
       email,
@@ -38,9 +99,8 @@ Deno.serve(async (req) => {
       distanceMiles,
       durationMinutes,
       notes,
-    } = body;
+    } = await req.json();
 
-    // Validate required fields
     if (!fullName || !email || !phone) {
       return new Response(
         JSON.stringify({ error: "Missing required fields: fullName, email, phone" }),
@@ -48,13 +108,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    const formatDuration = (mins: number) => {
-      if (!mins) return "Not calculated";
-      if (mins < 60) return `${mins} minutes`;
-      const h = Math.floor(mins / 60);
-      const m = mins % 60;
-      return m > 0 ? `${h}h ${m}min` : `${h}h`;
-    };
+    const priceEstimate = calculatePrice(distanceMiles, passengers, time, journeyType);
 
     const emailHtml = `
 <!DOCTYPE html>
@@ -72,6 +126,7 @@ Deno.serve(async (req) => {
   .row .value { color: #1e293b; }
   .highlight { background: #f0fdf4; border: 1px solid #4a9a8e; border-radius: 8px; padding: 16px; margin-top: 12px; }
   .highlight .big { font-size: 24px; font-weight: bold; color: #1e293b; }
+  .highlight .price { font-size: 28px; font-weight: bold; color: #4a9a8e; }
 </style></head>
 <body>
   <div class="container">
@@ -96,7 +151,7 @@ Deno.serve(async (req) => {
       </div>
 
       <div class="section">
-        <h2>📍 Route</h2>
+        <h2>Route</h2>
         <div class="row"><span class="label">Pick-up</span><span class="value">${pickupAddress || "Not provided"}</span></div>
         <div class="row"><span class="label">Drop-off</span><span class="value">${dropoffAddress || "Not provided"}</span></div>
       </div>
@@ -104,6 +159,7 @@ Deno.serve(async (req) => {
       <div class="highlight">
         <div class="row"><span class="label">Distance</span><span class="big">${distanceMiles ? `${distanceMiles} miles` : "Not calculated"}</span></div>
         <div class="row"><span class="label">Est. Duration</span><span class="big">${formatDuration(durationMinutes)}</span></div>
+        ${priceEstimate ? `<div class="row"><span class="label">Est. Price</span><span class="price">£${priceEstimate.finalPrice}</span></div>` : ""}
       </div>
 
       ${notes ? `
