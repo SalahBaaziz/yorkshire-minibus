@@ -95,7 +95,7 @@ const EnquiryForm = () => {
     return (
       <section id="enquiry" className="py-20 lg:py-28 bg-stone-300">
         <div className="mx-auto max-w-2xl px-6 text-center">
-          <div className="rounded-xl bg-navy-light/40 border border-navy-light/30 p-12">
+          <div className="rounded-xl border border-navy-light/30 p-12 bg-gold-light">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gold/20">
               <span className="text-3xl">✓</span>
             </div>
@@ -249,8 +249,8 @@ const EnquiryForm = () => {
                 className={inputClass}
                 type="date"
                 value={formData.date}
-                onChange={(e) => update("date", e.target.value)}
-              />
+                onChange={(e) => update("date", e.target.value)} />
+              
             </div>
           
             <div>
@@ -258,11 +258,11 @@ const EnquiryForm = () => {
               <select
                 className={inputClass}
                 value={formData.pickupTime}
-                onChange={(e) => update("pickupTime", e.target.value)}
-              >
+                onChange={(e) => update("pickupTime", e.target.value)}>
+                
                 <option value="">Select a time range</option>
                 {pickupTimeRanges.map((t) =>
-                  <option key={t} value={t}>{t}</option>
+                <option key={t} value={t}>{t}</option>
                 )}
               </select>
             </div>
@@ -275,11 +275,11 @@ const EnquiryForm = () => {
                   type="button"
                   onClick={() => setReturnJourney(true)}
                   className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    returnJourney
-                      ? "bg-gold text-navy"
-                      : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"
-                  }`}
-                >
+                  returnJourney ?
+                  "bg-gold text-navy" :
+                  "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
+                  }>
+                  
                   Yes
                 </button>
           
@@ -287,11 +287,11 @@ const EnquiryForm = () => {
                   type="button"
                   onClick={() => setReturnJourney(false)}
                   className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    !returnJourney
-                      ? "bg-gold text-navy"
-                      : "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"
-                  }`}
-                >
+                  !returnJourney ?
+                  "bg-gold text-navy" :
+                  "bg-navy-light/30 text-primary-foreground/60 hover:bg-navy-light/50"}`
+                  }>
+                  
                   No
                 </button>
           
@@ -304,11 +304,11 @@ const EnquiryForm = () => {
               <select
                 className={inputClass}
                 value={formData.returnTime}
-                onChange={(e) => update("returnTime", e.target.value)}
-              >
+                onChange={(e) => update("returnTime", e.target.value)}>
+                
                 <option value="">Select a time range</option>
                 {pickupTimeRanges.map((t) =>
-                  <option key={t} value={t}>{t}</option>
+                <option key={t} value={t}>{t}</option>
                 )}
               </select>
             </div>
