@@ -78,24 +78,25 @@ Deno.serve(async (req) => {
     // ── Message to Business Owner ───────────────────────────────────────
     const ownerMessage = `🚐 *NEW ENQUIRY*
 
-👤 ${fullName}
-📧 ${email}
-📞 ${phone}
+${fullName}
+${email}
+${phone}
 
 📋 *Journey Details*
-🎉 Occasion: ${journeyType || "Not specified"}
-👥 Passengers: ${passengers || "N/A"}
-📅 Date: ${formatDate(date)}
-🕐 Time: ${pickupTime || "Not specified"}
-🔄 Return: ${returnJourney ? `Yes – ${returnTime || "TBC"}` : "No"}
+Occasion: ${journeyType || "Not specified"}
+Passengers: ${passengers || "N/A"}
+Date: ${formatDate(date)}
+Time: ${pickupTime || "Not specified"}
+Return: ${returnJourney ? `Yes – ${returnTime || "TBC"}` : "No"}
 
 📍 *Route*
-▶️ From: ${pickupAddress || "Not provided"}
-🏁 To: ${dropoffAddress || "Not provided"}
-📏 Distance: ${distanceMiles ? `${distanceMiles} miles` : "N/A"}
-⏱️ Duration: ${formatDuration(durationMinutes)}
+From: ${pickupAddress || "Not provided"}
+To: ${dropoffAddress || "Not provided"}
+Distance: ${distanceMiles ? `${distanceMiles} miles` : "N/A"}
+Duration: ${formatDuration(durationMinutes)}
 
-💰 Estimated Price: £${estimatedPrice || "N/A"}
+💰 *Price*
+Estimated: £${estimatedPrice || "N/A"}
 
 Reply *ACCEPT* to confirm at this price.
 Reply *PRICE <amount>* to set a different price (e.g. PRICE 150).`;
