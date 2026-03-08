@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      enquiries: {
+        Row: {
+          created_at: string
+          date: string | null
+          distance_miles: number | null
+          dropoff_address: string | null
+          duration_minutes: number | null
+          email: string
+          estimated_price: number | null
+          full_name: string
+          id: string
+          journey_type: string | null
+          notes: string | null
+          passengers: string | null
+          phone: string
+          pickup_address: string | null
+          pickup_time: string | null
+          return_journey: boolean | null
+          return_time: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string | null
+          distance_miles?: number | null
+          dropoff_address?: string | null
+          duration_minutes?: number | null
+          email: string
+          estimated_price?: number | null
+          full_name: string
+          id?: string
+          journey_type?: string | null
+          notes?: string | null
+          passengers?: string | null
+          phone: string
+          pickup_address?: string | null
+          pickup_time?: string | null
+          return_journey?: boolean | null
+          return_time?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string | null
+          distance_miles?: number | null
+          dropoff_address?: string | null
+          duration_minutes?: number | null
+          email?: string
+          estimated_price?: number | null
+          full_name?: string
+          id?: string
+          journey_type?: string | null
+          notes?: string | null
+          passengers?: string | null
+          phone?: string
+          pickup_address?: string | null
+          pickup_time?: string | null
+          return_journey?: boolean | null
+          return_time?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
