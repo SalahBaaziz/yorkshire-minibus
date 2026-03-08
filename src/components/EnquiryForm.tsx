@@ -330,25 +330,15 @@ const EnquiryForm = () => {
           
                 <button
                   type="button"
-                  onClick={() => setReturnJourney(true)} className="bg-muted">
-
-
-
-
-                  
-                  
+                  onClick={() => setReturnJourney(true)}
+                  className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors border ${returnJourney ? "bg-gold/30 border-gold text-primary-foreground" : "bg-navy-light/20 border-navy-light/30 text-primary-foreground/60"}`}>
                   Yes
                 </button>
           
                 <button
                   type="button"
-                  onClick={() => setReturnJourney(false)} className="bg-muted">
-
-
-
-
-                  
-                  
+                  onClick={() => setReturnJourney(false)}
+                  className={`px-5 py-2 rounded-lg text-sm font-semibold transition-colors border ${!returnJourney ? "bg-gold/30 border-gold text-primary-foreground" : "bg-navy-light/20 border-navy-light/30 text-primary-foreground/60"}`}>
                   No
                 </button>
           
