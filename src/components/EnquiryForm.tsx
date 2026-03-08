@@ -152,7 +152,7 @@ const EnquiryForm = () => {
   const inputClass =
   "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
 
-  const labelClass = "block text-sm font-medium text-primary-foreground/80 mb-1.5";
+  const labelClass = "block text-sm font-medium text-primary-foreground mb-1.5";
 
   return (
     <section id="enquiry" aria-labelledby="enquiry-heading" className="py-20 lg:py-28 bg-stone-300">
@@ -198,14 +198,15 @@ const EnquiryForm = () => {
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Journey Details
                 </h3>
-                <p className="text-sm text-primary-foreground/60 mt-1">
+                <p className="text-sm text-primary-foreground/80 mt-1">
                   What kind of trip are you planning?
                 </p>
               </div>
 
               <div>
-                <label className={labelClass}>What's the occasion?</label>
+                <label htmlFor="journeyType" className={labelClass}>What's the occasion?</label>
                 <select
+                id="journeyType"
                 className={inputClass}
                 value={formData.journeyType}
                 onChange={(e) => update("journeyType", e.target.value)}>
@@ -218,8 +219,9 @@ const EnquiryForm = () => {
               </div>
 
               <div>
-                <label className={labelClass}>How many passengers?</label>
+                <label htmlFor="passengers" className={labelClass}>How many passengers?</label>
                 <select
+                id="passengers"
                 className={inputClass}
                 value={formData.passengers}
                 onChange={(e) => update("passengers", e.target.value)}>
@@ -240,7 +242,7 @@ const EnquiryForm = () => {
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Pick-up & Drop-off
                 </h3>
-                <p className="text-sm text-primary-foreground/60 mt-1">
+                <p className="text-sm text-primary-foreground/80 mt-1">
                   Search for a location — we'll pinpoint it on the map.
                 </p>
               </div>
@@ -277,7 +279,7 @@ const EnquiryForm = () => {
               <h3 className="font-serif text-lg font-bold text-primary-foreground">
                 When Do You Need Us?
               </h3>
-              <p className="text-sm text-primary-foreground/60 mt-1">
+              <p className="text-sm text-primary-foreground/80 mt-1">
                 A rough estimate is fine if you're not sure yet.
               </p>
             </div>
@@ -308,8 +310,9 @@ const EnquiryForm = () => {
             </div>
           
             <div>
-              <label className={labelClass}>Pick-up time</label>
+              <label htmlFor="pickupTime" className={labelClass}>Pick-up time</label>
               <select
+                id="pickupTime"
                 className={inputClass}
                 value={formData.pickupTime}
                 onChange={(e) => update("pickupTime", e.target.value)}>
@@ -354,8 +357,9 @@ const EnquiryForm = () => {
           
             {returnJourney &&
             <div>
-              <label className={labelClass}>Return pick-up time</label>
+              <label htmlFor="returnTime" className={labelClass}>Return pick-up time</label>
               <select
+                id="returnTime"
                 className={inputClass}
                 value={formData.returnTime}
                 onChange={(e) => update("returnTime", e.target.value)}>
@@ -378,7 +382,7 @@ const EnquiryForm = () => {
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Anything Else?
                 </h3>
-                <p className="text-sm text-primary-foreground/60 mt-1">
+                <p className="text-sm text-primary-foreground/80 mt-1">
                   Any special requirements we should know about.
                 </p>
               </div>
