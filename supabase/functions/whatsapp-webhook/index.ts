@@ -121,17 +121,17 @@ Deno.serve(async (req) => {
       const enquiry = await findEnquiry(supabase, shortId, "offered");
 
       if (!enquiry) {
-        await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
           `No booking offer found with that ID.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
       await supabase.from("enquiries").update({ status: "rejected" }).eq("id", enquiry.id);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `We're sorry to hear that. If you'd like to discuss the price, feel free to give us a call. Thanks for considering Yorkshire Minibus!`);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
         `${enquiry.full_name} has REJECTED the offer for booking ${shortId} (£${enquiry.estimated_price}).`);
 
