@@ -81,6 +81,29 @@ const EnquiryForm = () => {
       if (error) throw error;
       if (data && !data.success) throw new Error(data.error || "Failed to send");
 
+      // Trigger WhatsApp notifications (non-blocking)
+      if (data?.enquiryId) {
+        supabase.functions.invoke("send-whatsapp", {
+          body: {
+            enquiryId: data.enquiryId,
+            fullName: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            journeyType: formData.journeyType,
+            passengers: formData.passengers,
+            pickupAddress: pickupLocation?.displayName || null,
+            dropoffAddress: dropoffLocation?.displayName || null,
+            date: formData.date,
+            pickupTime: formData.pickupTime,
+            returnJourney,
+            returnTime: returnJourney ? formData.returnTime : null,
+            distanceMiles: routeInfo?.distanceMiles || null,
+            durationMinutes: routeInfo?.durationMinutes || null,
+            estimatedPrice: data.estimatedPrice,
+          }
+        }).catch((err) => console.warn("WhatsApp send failed (non-blocking):", err));
+      }
+
       setSubmitted(true);
     } catch (err: any) {
       console.error("Submit error:", err);
