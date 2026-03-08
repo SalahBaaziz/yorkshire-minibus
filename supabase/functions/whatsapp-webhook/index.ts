@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
     const body = (formData.get("Body") as string || "").trim();
     const from = formData.get("From") as string || "";
 
-    console.log(`Received SMS from ${from}: ${body}`);
+    console.log(`Received WhatsApp from ${from}: ${body}`);
 
     const emptyTwiml = `<?xml version="1.0" encoding="UTF-8"?><Response></Response>`;
     const xmlHeaders = { ...corsHeaders, "Content-Type": "text/xml" };
@@ -46,7 +46,7 @@ Deno.serve(async (req) => {
       const enquiry = await findEnquiry(supabase, shortId, "pending");
 
       if (!enquiry) {
-        await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
           `No pending enquiry found with ID ${shortId}.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
@@ -54,10 +54,10 @@ Deno.serve(async (req) => {
       await supabase.from("enquiries").update({ status: "offered" }).eq("id", enquiry.id);
 
       const clientPhone = formatClientPhone(enquiry.phone);
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         clientPhone, buildClientOffer(enquiry, enquiry.estimated_price));
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `Price of £${enquiry.estimated_price} sent to ${enquiry.full_name} for confirmation.`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
@@ -71,7 +71,7 @@ Deno.serve(async (req) => {
       const enquiry = await findEnquiry(supabase, shortId, "pending");
 
       if (!enquiry) {
-        await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
           `No pending enquiry found with ID ${shortId}.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
@@ -81,10 +81,10 @@ Deno.serve(async (req) => {
         .eq("id", enquiry.id);
 
       const clientPhone = formatClientPhone(enquiry.phone);
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         clientPhone, buildClientOffer(enquiry, newPrice));
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `New price of £${newPrice} sent to ${enquiry.full_name} for confirmation.`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
@@ -97,17 +97,17 @@ Deno.serve(async (req) => {
       const enquiry = await findEnquiry(supabase, shortId, "offered");
 
       if (!enquiry) {
-        await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
           `No booking offer found with that ID. It may have already been confirmed or expired.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
       await supabase.from("enquiries").update({ status: "confirmed" }).eq("id", enquiry.id);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `Booking Confirmed! Your ${enquiry.journey_type || "minibus"} trip on ${formatDate(enquiry.date)} is locked in at £${enquiry.estimated_price}. We'll be in touch with payment details shortly. Thank you for choosing Yorkshire Minibus!`);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
         `${enquiry.full_name} has CONFIRMED booking ${shortId} at £${enquiry.estimated_price}!`);
 
@@ -121,17 +121,17 @@ Deno.serve(async (req) => {
       const enquiry = await findEnquiry(supabase, shortId, "offered");
 
       if (!enquiry) {
-        await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
           `No booking offer found with that ID.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
       await supabase.from("enquiries").update({ status: "rejected" }).eq("id", enquiry.id);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `We're sorry to hear that. If you'd like to discuss the price, feel free to give us a call. Thanks for considering Yorkshire Minibus!`);
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
         `${enquiry.full_name} has REJECTED the offer for booking ${shortId} (£${enquiry.estimated_price}).`);
 
@@ -192,15 +192,15 @@ Reply CONFIRM ${shortId} to accept and book.
 Reply REJECT ${shortId} if you'd like to decline.`;
 }
 
-async function sendSMS(
+async function sendWhatsApp(
   accountSid: string, authToken: string, fromNumber: string,
   to: string, body: string
 ) {
   const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
 
   const params = new URLSearchParams();
-  params.append("From", fromNumber);
-  params.append("To", to);
+  params.append("From", `whatsapp:${fromNumber}`);
+  params.append("To", `whatsapp:${to}`);
   params.append("Body", body);
 
   const res = await fetch(url, {

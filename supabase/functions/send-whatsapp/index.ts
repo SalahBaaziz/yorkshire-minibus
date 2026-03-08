@@ -54,13 +54,13 @@ Deno.serve(async (req) => {
       return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
     };
 
-    // Helper to send an SMS via Twilio
-    const sendSMS = async (to: string, body: string) => {
+    // Helper to send a WhatsApp message via Twilio
+    const sendWhatsApp = async (to: string, body: string) => {
       const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
 
       const params = new URLSearchParams();
-      params.append("From", TWILIO_WHATSAPP_NUMBER);
-      params.append("To", to);
+      params.append("From", `whatsapp:${TWILIO_WHATSAPP_NUMBER}`);
+      params.append("To", `whatsapp:${to}`);
       params.append("Body", body);
 
       const res = await fetch(url, {
@@ -125,14 +125,14 @@ We've received your request and will get back to you shortly with a confirmed pr
       clientPhone = "+44" + clientPhone;
     }
 
-    // Send both messages
+    // Send both WhatsApp messages
     const [ownerResult, clientResult] = await Promise.allSettled([
-      sendSMS(BUSINESS_WHATSAPP_NUMBER, ownerMessage),
-      sendSMS(clientPhone, clientMessage),
+      sendWhatsApp(BUSINESS_WHATSAPP_NUMBER, ownerMessage),
+      sendWhatsApp(clientPhone, clientMessage),
     ]);
 
-    console.log("Owner SMS:", ownerResult);
-    console.log("Client SMS:", clientResult);
+    console.log("Owner WhatsApp:", ownerResult);
+    console.log("Client WhatsApp:", clientResult);
 
     return new Response(
       JSON.stringify({
@@ -143,7 +143,7 @@ We've received your request and will get back to you shortly with a confirmed pr
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: unknown) {
-    console.error("Error in send-sms:", error);
+    console.error("Error in send-whatsapp:", error);
     const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(
       JSON.stringify({ success: false, error: message }),
