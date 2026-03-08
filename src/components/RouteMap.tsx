@@ -131,6 +131,7 @@ const LeafletMap = ({ pickup, dropoff, onRouteCalculated, onLoadingChange }: Rou
     // Fetch route
     let cancelled = false;
     setLoading(true);
+    onLoadingChange?.(true);
     setError(null);
 
     (async () => {
