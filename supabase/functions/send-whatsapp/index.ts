@@ -20,7 +20,6 @@ Deno.serve(async (req) => {
     }
 
     const {
-      enquiryId,
       fullName,
       email,
       phone,
@@ -37,7 +36,6 @@ Deno.serve(async (req) => {
       estimatedPrice,
     } = await req.json();
 
-    // Format duration
     const formatDuration = (mins: number) => {
       if (!mins) return "N/A";
       if (mins < 60) return `${mins} min`;
@@ -46,7 +44,6 @@ Deno.serve(async (req) => {
       return m > 0 ? `${h}h ${m}min` : `${h}h`;
     };
 
-    // Format date
     const formatDate = (dateStr: string) => {
       if (!dateStr) return "Not specified";
       const [y, m, d] = dateStr.split("-");
@@ -54,10 +51,8 @@ Deno.serve(async (req) => {
       return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
     };
 
-    // Helper to send a WhatsApp message via Twilio
     const sendWhatsApp = async (to: string, body: string) => {
       const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
-
       const params = new URLSearchParams();
       params.append("From", `whatsapp:${TWILIO_WHATSAPP_NUMBER}`);
       params.append("To", `whatsapp:${to}`);
@@ -81,43 +76,42 @@ Deno.serve(async (req) => {
     };
 
     // ── Message to Business Owner ───────────────────────────────────────
-    const ownerMessage = `NEW MINIBUS ENQUIRY
+    const ownerMessage = `🚐 *NEW ENQUIRY*
 
-${fullName}
-Email: ${email}
-Phone: ${phone}
+👤 ${fullName}
+📧 ${email}
+📞 ${phone}
 
-Journey Details:
-- Occasion: ${journeyType || "Not specified"}
-- Passengers: ${passengers || "N/A"}
-- Date: ${formatDate(date)}
-- Time: ${pickupTime || "Not specified"}
-- Return: ${returnJourney ? `Yes - ${returnTime || "TBC"}` : "No"}
+📋 *Journey Details*
+🎉 Occasion: ${journeyType || "Not specified"}
+👥 Passengers: ${passengers || "N/A"}
+📅 Date: ${formatDate(date)}
+🕐 Time: ${pickupTime || "Not specified"}
+🔄 Return: ${returnJourney ? `Yes – ${returnTime || "TBC"}` : "No"}
 
-Route:
-- From: ${pickupAddress || "Not provided"}
-- To: ${dropoffAddress || "Not provided"}
-- Distance: ${distanceMiles ? `${distanceMiles} miles` : "N/A"}
-- Duration: ${formatDuration(durationMinutes)}
+📍 *Route*
+▶️ From: ${pickupAddress || "Not provided"}
+🏁 To: ${dropoffAddress || "Not provided"}
+📏 Distance: ${distanceMiles ? `${distanceMiles} miles` : "N/A"}
+⏱️ Duration: ${formatDuration(durationMinutes)}
 
-Estimated Price: £${estimatedPrice || "N/A"}
+💰 Estimated Price: £${estimatedPrice || "N/A"}
 
-Reply ACCEPT ${enquiryId?.slice(0, 8)} to confirm at this price.
-Reply PRICE ${enquiryId?.slice(0, 8)} <amount> to set a different price (e.g. PRICE ${enquiryId?.slice(0, 8)} 150).`;
+Reply *ACCEPT* to confirm at this price.
+Reply *PRICE <amount>* to set a different price (e.g. PRICE 150).`;
 
     // ── Thank-you message to Client ─────────────────────────────────────
-    const clientMessage = `Hi ${fullName}!
+    const clientMessage = `👋 Hi ${fullName}!
 
-Thanks for your enquiry with Yorkshire Minibus! Here's a summary:
+Thanks for your enquiry with *Yorkshire Minibus*! Here's a summary:
 
-${journeyType || "Minibus"} journey
-${formatDate(date)} at ${pickupTime || "TBC"}
-${pickupAddress || "TBC"} to ${dropoffAddress || "TBC"}
-${passengers || "N/A"} passengers
+🎉 ${journeyType || "Minibus"} journey
+📅 ${formatDate(date)} at ${pickupTime || "TBC"}
+📍 ${pickupAddress || "TBC"} ➡️ ${dropoffAddress || "TBC"}
+👥 ${passengers || "N/A"} passengers
 
-We've received your request and will get back to you shortly with a confirmed price. Sit tight!`;
+✅ We've received your request and will get back to you shortly with a confirmed price. Sit tight!`;
 
-    // Format client phone for SMS (assume UK if no country code)
     let clientPhone = phone.replace(/\s+/g, "");
     if (clientPhone.startsWith("0")) {
       clientPhone = "+44" + clientPhone.slice(1);
@@ -125,7 +119,6 @@ We've received your request and will get back to you shortly with a confirmed pr
       clientPhone = "+44" + clientPhone;
     }
 
-    // Send both WhatsApp messages
     const [ownerResult, clientResult] = await Promise.allSettled([
       sendWhatsApp(BUSINESS_WHATSAPP_NUMBER, ownerMessage),
       sendWhatsApp(clientPhone, clientMessage),
