@@ -38,13 +38,13 @@ Deno.serve(async (req) => {
     const normFrom = from.replace(/[^0-9+]/g, "");
     const isOwner = normFrom === normBusiness;
 
-    // ── OWNER: ACCEPT ───────────────────────────────────────────────────
-    if (/^ACCEPT$/i.test(body) && isOwner) {
+    // ── OWNER: YES (accept quote) ──────────────────────────────────────
+    if (/^YES$/i.test(body) && isOwner) {
       const enquiry = await findLatestEnquiry(supabase, "pending");
 
       if (!enquiry) {
         await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-          `❌ No pending enquiries found.`);
+          `No pending enquiries found.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
@@ -55,7 +55,29 @@ Deno.serve(async (req) => {
         clientPhone, buildClientOffer(enquiry, enquiry.estimated_price));
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-        `✅ Quote of *£${enquiry.estimated_price}* sent to ${enquiry.full_name} for confirmation.`);
+        `Quote of £${enquiry.estimated_price} sent to ${enquiry.full_name} for confirmation.`);
+
+      return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
+    }
+
+    // ── OWNER: NO (decline enquiry) ─────────────────────────────────────
+    if (/^NO$/i.test(body) && isOwner) {
+      const enquiry = await findLatestEnquiry(supabase, "pending");
+
+      if (!enquiry) {
+        await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+          `No pending enquiries found.`);
+        return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
+      }
+
+      await supabase.from("enquiries").update({ status: "declined" }).eq("id", enquiry.id);
+
+      const clientPhone = formatClientPhone(enquiry.phone);
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+        clientPhone, `Hi ${enquiry.full_name}, unfortunately we're unable to accommodate your booking request at this time. Thank you for considering Yorkshire Minibus.`);
+
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+        `Enquiry from ${enquiry.full_name} has been declined.`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
     }
@@ -68,7 +90,7 @@ Deno.serve(async (req) => {
 
       if (!enquiry) {
         await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-          `❌ No pending enquiries found.`);
+          `No pending enquiries found.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
@@ -81,18 +103,18 @@ Deno.serve(async (req) => {
         clientPhone, buildClientOffer(enquiry, newPrice));
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-        `✅ Custom quote of *£${newPrice}* sent to ${enquiry.full_name} for confirmation.`);
+        `Custom quote of £${newPrice} sent to ${enquiry.full_name} for confirmation.`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
     }
 
-    // ── CLIENT: CONFIRM ─────────────────────────────────────────────────
-    if (/^CONFIRM$/i.test(body) && !isOwner) {
+    // ── CLIENT: YES (confirm booking) ───────────────────────────────────
+    if (/^YES$/i.test(body) && !isOwner) {
       const enquiry = await findEnquiryByClientPhone(supabase, from, "offered");
 
       if (!enquiry) {
         await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-          `❌ No active quote found. It may have already been confirmed or expired.`);
+          `No active quote found. It may have already been confirmed or expired.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
@@ -101,43 +123,71 @@ Deno.serve(async (req) => {
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `*Booking Confirmed!*
 
-Your ${enquiry.journey_type || "minibus"} trip on *${formatDate(enquiry.date)}* is locked in at *£${enquiry.estimated_price}*.
+Your ${enquiry.journey_type || "minibus"} trip on ${formatDate(enquiry.date)} is locked in at £${enquiry.estimated_price}.
 
 We'll be in touch with payment details shortly.
 
-Thank you for choosing *Yorkshire Minibus*!`);
+Thank you for choosing Yorkshire Minibus!`);
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
         `*BOOKING CONFIRMED*
 
-${enquiry.full_name} has confirmed their booking at *£${enquiry.estimated_price}*!
+${enquiry.full_name} has confirmed their booking.
 
-📋 *Details*
-${formatDate(enquiry.date)} at ${enquiry.pickup_time || "TBC"}
-${enquiry.pickup_address || "TBC"} → ${enquiry.dropoff_address || "TBC"}`);
+📋 *Journey Details*
+Type: ${enquiry.journey_type || "Minibus"}
+Passengers: ${enquiry.passengers || "N/A"}
+
+📅 *Calendar Entry*
+Date: ${formatDate(enquiry.date)}
+Time: ${enquiry.pickup_time || "TBC"}
+
+📍 *Route*
+From: ${enquiry.pickup_address || "TBC"}
+To: ${enquiry.dropoff_address || "TBC"}
+
+💰 *Price*
+£${enquiry.estimated_price}
+
+👤 *Contact*
+${enquiry.full_name}
+${enquiry.phone}
+${enquiry.email}`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
     }
 
-    // ── CLIENT: REJECT ──────────────────────────────────────────────────
-    if (/^REJECT$/i.test(body) && !isOwner) {
+    // ── CLIENT: NO (reject quote) ───────────────────────────────────────
+    if (/^NO$/i.test(body) && !isOwner) {
       const enquiry = await findEnquiryByClientPhone(supabase, from, "offered");
 
       if (!enquiry) {
         await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-          `❌ No active quote found.`);
+          `No active quote found.`);
         return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
       }
 
       await supabase.from("enquiries").update({ status: "rejected" }).eq("id", enquiry.id);
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-        `We're sorry to hear that 😔 If you'd like to discuss the price, feel free to give us a call. Thanks for considering *Yorkshire Minibus*!`);
+        `We're sorry to hear that. If you'd like to discuss the price, feel free to give us a call. Thanks for considering Yorkshire Minibus!`);
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
-        `⚠️ ${enquiry.full_name} has *rejected* the quote of £${enquiry.estimated_price}.`);
+        `*QUOTE REJECTED*
+
+${enquiry.full_name} has declined the quote.
+
+📋 *Journey Details*
+${formatDate(enquiry.date)} at ${enquiry.pickup_time || "TBC"}
+${enquiry.pickup_address || "TBC"} → ${enquiry.dropoff_address || "TBC"}
+
+💰 *Quoted Price*
+£${enquiry.estimated_price}
+
+👤 *Contact*
+${enquiry.phone}`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
     }
