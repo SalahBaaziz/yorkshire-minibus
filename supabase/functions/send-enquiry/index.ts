@@ -189,7 +189,18 @@ Deno.serve(async (req) => {
       body: JSON.stringify({
         from: "Yorkshire Minibus <onboarding@resend.dev>",
         to: [BUSINESS_EMAIL],
-        subject: `New Enquiry: ${journeyType || "General"} – ${fullName}`,
+      subject: (() => {
+        const isUrgent = date && (() => {
+          const bookingDate = new Date(date);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          bookingDate.setHours(0, 0, 0, 0);
+          const diffDays = Math.ceil((bookingDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+          return diffDays >= 0 && diffDays <= 5;
+        })();
+        const prefix = isUrgent ? "🚨 URGENT - " : "";
+        return `${prefix}New Enquiry: ${journeyType || "General"} – ${fullName}`;
+      })(),
         html: emailHtml,
         reply_to: email,
       }),

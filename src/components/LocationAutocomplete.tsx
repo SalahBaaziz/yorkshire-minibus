@@ -15,7 +15,7 @@ interface LocationAutocompleteProps {
   onChange: (location: LocationResult | null) => void;
 }
 
-const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
+const PHOTON_URL = "https://photon.komoot.io/api";
 
 const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationAutocompleteProps) => {
   const [query, setQuery] = useState(value?.displayName || "");
@@ -37,6 +37,23 @@ const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationA
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const formatPhotonResult = (props: any): string => {
+    const parts: string[] = [];
+    if (props.housenumber && props.street) {
+      parts.push(`${props.housenumber} ${props.street}`);
+    } else if (props.street) {
+      parts.push(props.street);
+    } else if (props.name) {
+      parts.push(props.name);
+    }
+    if (props.city || props.town || props.village) {
+      parts.push(props.city || props.town || props.village);
+    }
+    if (props.county) parts.push(props.county);
+    if (props.postcode) parts.push(props.postcode);
+    return parts.join(", ") || props.name || "Unknown location";
+  };
+
   const searchLocations = useCallback(async (searchQuery: string) => {
     if (searchQuery.length < 3) {
       setSuggestions([]);
@@ -49,24 +66,29 @@ const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationA
     try {
       const params = new URLSearchParams({
         q: searchQuery,
-        format: "json",
-        addressdetails: "1",
-        limit: "5",
-        countrycodes: "gb",
+        limit: "7",
+        lang: "en",
+        lat: "53.8",
+        lon: "-1.55",
+        zoom: "18",
       });
 
-      const response = await fetch(`${NOMINATIM_URL}?${params}`, {
-        headers: { "Accept-Language": "en" },
-      });
+      const response = await fetch(`${PHOTON_URL}?${params}`);
 
       if (!response.ok) throw new Error("Search failed");
 
       const data = await response.json();
-      const results: LocationResult[] = data.map((item: any) => ({
-        displayName: item.display_name,
-        lat: parseFloat(item.lat),
-        lon: parseFloat(item.lon),
-        placeId: item.place_id?.toString() || "",
+      
+      // Filter to UK results only
+      const ukResults = (data.features || []).filter(
+        (f: any) => f.properties?.country === "United Kingdom"
+      );
+
+      const results: LocationResult[] = ukResults.map((feature: any) => ({
+        displayName: formatPhotonResult(feature.properties),
+        lat: feature.geometry.coordinates[1],
+        lon: feature.geometry.coordinates[0],
+        placeId: feature.properties.osm_id?.toString() || Math.random().toString(),
       }));
 
       setSuggestions(results);
