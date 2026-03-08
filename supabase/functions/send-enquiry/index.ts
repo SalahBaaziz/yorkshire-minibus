@@ -92,6 +92,12 @@ Deno.serve(async (req) => {
     const BUSINESS_EMAIL = Deno.env.get("BUSINESS_EMAIL");
     if (!BUSINESS_EMAIL) throw new Error("BUSINESS_EMAIL is not configured");
 
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) throw new Error("Missing Supabase config");
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
     const {
       fullName,
       email,
