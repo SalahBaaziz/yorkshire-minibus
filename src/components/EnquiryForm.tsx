@@ -508,8 +508,8 @@ const EnquiryForm = () => {
 
           {/* Validation message */}
           {validationErrors.length > 0 && (
-            <p className="mt-4 text-sm text-destructive font-medium">
-              Please fill in the highlighted fields before continuing.
+            <p className="mt-4 text-sm text-primary-foreground font-semibold bg-destructive/15 border border-destructive/30 rounded-lg px-3 py-2">
+              ⚠ Please fill in the highlighted fields before continuing.
             </p>
           )}
 
