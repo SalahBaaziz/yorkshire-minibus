@@ -50,10 +50,10 @@
 --gold-light: 168 36% 40%;
 --gold-dark: 168 34% 22%;
 
-/* TYPOGRAPHY */
+/* TYPOGRAPHY – size-adjust fallbacks reduce CLS from web font swap */
 
---font-body: "DM Sans", sans-serif;
---font-heading: "Playfair Display", serif;
+--font-body: "DM Sans", "DM Sans Fallback", sans-serif;
+--font-heading: "Playfair Display", "Playfair Fallback", serif;
 
 /* FONT SIZES (match screenshot) */
 
