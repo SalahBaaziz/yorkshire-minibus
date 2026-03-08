@@ -76,7 +76,7 @@ const Navbar = () => {
           <a
           href="#enquiry"
           onClick={() => setMobileOpen(false)}
-          className="block rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-navy text-center">
+          className="block rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-primary-foreground text-center">
           
             Get a Quote
           </a>

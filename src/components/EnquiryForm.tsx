@@ -382,7 +382,7 @@ const EnquiryForm = () => {
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Anything Else?
                 </h3>
-                <p className="text-sm text-primary-foreground/60 mt-1">
+                <p className="text-sm text-primary-foreground/80 mt-1">
                   Any special requirements we should know about.
                 </p>
               </div>

@@ -23,7 +23,7 @@ const Hero = () => {
         <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
           <a
             href="#enquiry"
-            className="bg-gold px-8 py-4 text-base font-semibold text-navy transition-colors hover:bg-gold-light rounded-xl">
+            className="bg-gold px-8 py-4 text-base font-semibold text-primary-foreground transition-colors hover:bg-gold-light rounded-xl">
             
             Book with us!  
           </a>

@@ -44,11 +44,11 @@
 --navy-dark: 210 12% 10%;
 --navy-light: 210 8% 26%;
 
-/* TEAL ACCENT */
+/* TEAL ACCENT – darkened for WCAG AA contrast */
 
---gold: 168 32% 45%;
---gold-light: 168 36% 52%;
---gold-dark: 168 34% 35%;
+--gold: 168 38% 30%;
+--gold-light: 168 36% 40%;
+--gold-dark: 168 34% 22%;
 
 /* TYPOGRAPHY */
 
