@@ -37,6 +37,7 @@ interface RouteMapProps {
   pickup:  LocationResult | null;
   dropoff: LocationResult | null;
   onRouteCalculated: (info: RouteInfo | null) => void;
+  onLoadingChange?: (loading: boolean) => void;
 }
 
 // ── Error boundary ────────────────────────────────────────────────────────────
@@ -61,7 +62,7 @@ class MapErrorBoundary extends Component<{ children: ReactNode }, EBState> {
 const OSRM_URL = "https://router.project-osrm.org/route/v1/driving";
 
 // ── Core map component — pure Leaflet JS, no react-leaflet ───────────────────
-const LeafletMap = ({ pickup, dropoff, onRouteCalculated }: RouteMapProps) => {
+const LeafletMap = ({ pickup, dropoff, onRouteCalculated, onLoadingChange }: RouteMapProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef       = useRef<L.Map | null>(null);
   const pickupMarker = useRef<L.Marker | null>(null);
@@ -130,6 +131,7 @@ const LeafletMap = ({ pickup, dropoff, onRouteCalculated }: RouteMapProps) => {
     // Fetch route
     let cancelled = false;
     setLoading(true);
+    onLoadingChange?.(true);
     setError(null);
 
     (async () => {
@@ -163,7 +165,10 @@ const LeafletMap = ({ pickup, dropoff, onRouteCalculated }: RouteMapProps) => {
           onRouteCalculated(null);
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          onLoadingChange?.(false);
+        }
       }
     })();
 

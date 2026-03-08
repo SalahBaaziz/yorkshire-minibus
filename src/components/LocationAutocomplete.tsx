@@ -107,7 +107,7 @@ const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationA
     onChange(null); // clear selection when typing
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => searchLocations(val), 400);
+    debounceRef.current = setTimeout(() => searchLocations(val), 250);
   };
 
   const handleSelect = (location: LocationResult) => {

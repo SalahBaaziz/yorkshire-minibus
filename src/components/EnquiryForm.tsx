@@ -44,6 +44,7 @@ const EnquiryForm = () => {
   const [pickupLocation, setPickupLocation] = useState<LocationResult | null>(null);
   const [dropoffLocation, setDropoffLocation] = useState<LocationResult | null>(null);
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
+  const [routeLoading, setRouteLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -259,7 +260,8 @@ const EnquiryForm = () => {
               <RouteMap
               pickup={pickupLocation}
               dropoff={dropoffLocation}
-              onRouteCalculated={setRouteInfo} />
+              onRouteCalculated={setRouteInfo}
+              onLoadingChange={setRouteLoading} />
             
             </div>
           }
@@ -467,9 +469,15 @@ const EnquiryForm = () => {
             {step < 5 ?
             <button
               onClick={() => goToStep(step + 1)}
-              className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted">
+              disabled={step === 2 && pickupLocation && dropoffLocation && (routeLoading || !routeInfo)}
+              className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
               
-                Next
+                {step === 2 && routeLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Calculating…
+                  </span>
+                ) : "Next"}
               </button> :
 
             <button
