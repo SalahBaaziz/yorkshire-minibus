@@ -32,6 +32,7 @@ const pickupTimeRanges = [
 const EnquiryForm = () => {
   const formRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState(1);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const goToStep = useCallback((newStep: number) => {
     setStep(newStep);
@@ -65,6 +66,41 @@ const EnquiryForm = () => {
 
   const update = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setValidationErrors((prev) => prev.filter((f) => f !== field));
+  };
+
+  const validateStep = (s: number): string[] => {
+    const missing: string[] = [];
+    if (s === 1) {
+      if (!formData.journeyType) missing.push("journeyType");
+      if (!formData.passengers) missing.push("passengers");
+    } else if (s === 2) {
+      if (!pickupLocation) missing.push("pickup");
+      if (!dropoffLocation) missing.push("dropoff");
+    } else if (s === 3) {
+      if (!formData.date) missing.push("date");
+      if (!formData.pickupTime) missing.push("pickupTime");
+      if (returnJourney && !formData.returnTime) missing.push("returnTime");
+    } else if (s === 5) {
+      if (!formData.fullName) missing.push("fullName");
+      if (!formData.email) missing.push("email");
+      if (!formData.phone) missing.push("phone");
+    }
+    return missing;
+  };
+
+  const handleNext = () => {
+    if (step === 4) {
+      goToStep(step + 1);
+      return;
+    }
+    const missing = validateStep(step);
+    if (missing.length > 0) {
+      setValidationErrors(missing);
+      return;
+    }
+    setValidationErrors([]);
+    goToStep(step + 1);
   };
 
   const handleSubmit = async () => {
@@ -149,6 +185,8 @@ const EnquiryForm = () => {
 
   }
 
+  const errorBorderClass = "!border-destructive !ring-destructive/50";
+
   const inputClass =
   "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
 
@@ -207,7 +245,7 @@ const EnquiryForm = () => {
                 <label htmlFor="journeyType" className={labelClass}>What's the occasion?</label>
                 <select
                 id="journeyType"
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("journeyType") && errorBorderClass)}
                 value={formData.journeyType}
                 onChange={(e) => update("journeyType", e.target.value)}>
                 
@@ -222,7 +260,7 @@ const EnquiryForm = () => {
                 <label htmlFor="passengers" className={labelClass}>How many passengers?</label>
                 <select
                 id="passengers"
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("passengers") && errorBorderClass)}
                 value={formData.passengers}
                 onChange={(e) => update("passengers", e.target.value)}>
                 
@@ -251,14 +289,16 @@ const EnquiryForm = () => {
               label="Pick-up location"
               placeholder="e.g. Leeds City Centre"
               value={pickupLocation}
-              onChange={setPickupLocation} />
+              onChange={(loc) => { setPickupLocation(loc); setValidationErrors((prev) => prev.filter((f) => f !== "pickup")); }}
+              hasError={validationErrors.includes("pickup")} />
             
 
               <LocationAutocomplete
               label="Drop-off location"
               placeholder="e.g. Harrogate town centre"
               value={dropoffLocation}
-              onChange={setDropoffLocation} />
+              onChange={(loc) => { setDropoffLocation(loc); setValidationErrors((prev) => prev.filter((f) => f !== "dropoff")); }}
+              hasError={validationErrors.includes("dropoff")} />
             
 
               <RouteInfoDisplay routeInfo={routeInfo} />
@@ -290,7 +330,7 @@ const EnquiryForm = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className={cn(inputClass, "flex items-center justify-between text-left")}>
+                    className={cn(inputClass, "flex items-center justify-between text-left", validationErrors.includes("date") && errorBorderClass)}>
                     
                     {formData.date ? format(new Date(formData.date + "T00:00:00"), "d MMM yyyy") : <span className="text-primary-foreground/40">Select a date</span>}
                     <CalendarIcon className="h-4 w-4 text-primary-foreground/40" />
@@ -313,7 +353,7 @@ const EnquiryForm = () => {
               <label htmlFor="pickupTime" className={labelClass}>Pick-up time</label>
               <select
                 id="pickupTime"
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("pickupTime") && errorBorderClass)}
                 value={formData.pickupTime}
                 onChange={(e) => update("pickupTime", e.target.value)}>
                 
@@ -350,7 +390,7 @@ const EnquiryForm = () => {
               <label htmlFor="returnTime" className={labelClass}>Return pick-up time</label>
               <select
                 id="returnTime"
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("returnTime") && errorBorderClass)}
                 value={formData.returnTime}
                 onChange={(e) => update("returnTime", e.target.value)}>
                 
@@ -431,7 +471,7 @@ const EnquiryForm = () => {
               <div>
                 <label className="text-primary-foreground">Full Name</label>
                 <input
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("fullName") && errorBorderClass)}
                 placeholder="e.g. John Smith"
                 value={formData.fullName}
                 onChange={(e) => update("fullName", e.target.value)} />
@@ -441,7 +481,7 @@ const EnquiryForm = () => {
               <div>
                 <label className="text-primary-foreground">Email Address</label>
                 <input
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("email") && errorBorderClass)}
                 type="email"
                 placeholder="e.g. john@example.com"
                 value={formData.email}
@@ -452,7 +492,7 @@ const EnquiryForm = () => {
               <div>
                 <label className="text-primary-foreground">Phone Number</label>
                 <input
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("phone") && errorBorderClass)}
                 type="tel"
                 placeholder="e.g. 07700 900000"
                 value={formData.phone}
@@ -466,11 +506,18 @@ const EnquiryForm = () => {
             </div>
           }
 
+          {/* Validation message */}
+          {validationErrors.length > 0 && (
+            <p className="mt-4 text-sm text-destructive font-medium">
+              Please fill in the highlighted fields before continuing.
+            </p>
+          )}
+
           {/* NAVIGATION */}
-          <div className="mt-8 flex justify-between">
+          <div className="mt-4 flex justify-between">
             {step > 1 ?
             <button
-              onClick={() => goToStep(step - 1)}
+              onClick={() => { setValidationErrors([]); goToStep(step - 1); }}
               className="px-6 py-2.5 text-sm transition-colors bg-muted text-navy rounded-xl font-semibold border-0">
               
                 Back
@@ -481,8 +528,8 @@ const EnquiryForm = () => {
 
             {step < 5 ?
             <button
-              onClick={() => goToStep(step + 1)}
-              disabled={step === 2 && pickupLocation && dropoffLocation && (routeLoading || !routeInfo)}
+              onClick={handleNext}
+              disabled={step === 2 && pickupLocation && dropoffLocation && (routeLoading || !routeInfo) ? true : false}
               className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
               
                 {step === 2 && routeLoading ?
@@ -494,7 +541,11 @@ const EnquiryForm = () => {
               </button> :
 
             <button
-              onClick={handleSubmit}
+              onClick={() => {
+                const missing = validateStep(5);
+                if (missing.length > 0) { setValidationErrors(missing); return; }
+                handleSubmit();
+              }}
               disabled={submitting}
               className="px-8 py-2.5 text-sm font-semibold text-navy transition-colors bg-muted rounded-xl disabled:opacity-50 flex items-center gap-2">
               

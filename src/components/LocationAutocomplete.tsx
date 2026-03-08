@@ -13,11 +13,12 @@ interface LocationAutocompleteProps {
   placeholder: string;
   value: LocationResult | null;
   onChange: (location: LocationResult | null) => void;
+  hasError?: boolean;
 }
 
 const PHOTON_URL = "https://photon.komoot.io/api";
 
-const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationAutocompleteProps) => {
+const LocationAutocomplete = ({ label, placeholder, value, onChange, hasError }: LocationAutocompleteProps) => {
   const [query, setQuery] = useState(value?.displayName || "");
   const [suggestions, setSuggestions] = useState<LocationResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +119,7 @@ const LocationAutocomplete = ({ label, placeholder, value, onChange }: LocationA
   };
 
   const inputClass =
-    "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 pl-10 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
+    `w-full rounded-lg border ${hasError ? "border-destructive ring-2 ring-destructive/50" : "border-navy-light/30"} bg-navy-light/20 px-4 py-3 pl-10 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50`;
 
   return (
     <div ref={wrapperRef} className="relative">
