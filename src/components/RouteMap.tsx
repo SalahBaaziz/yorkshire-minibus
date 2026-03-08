@@ -165,7 +165,10 @@ const LeafletMap = ({ pickup, dropoff, onRouteCalculated, onLoadingChange }: Rou
           onRouteCalculated(null);
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          onLoadingChange?.(false);
+        }
       }
     })();
 
