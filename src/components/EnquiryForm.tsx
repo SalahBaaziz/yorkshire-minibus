@@ -190,7 +190,7 @@ const EnquiryForm = () => {
           )}
         </div>
 
-        <div ref={formRef} className="rounded-xl border border-navy-light/30 p-8 bg-primary">
+        <div ref={formRef} className="rounded-xl border border-navy-light/30 p-8 bg-gold-light">
           {/* STEP 1 – Journey */}
           {step === 1 &&
           <div className="space-y-5">
