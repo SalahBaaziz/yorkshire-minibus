@@ -18,8 +18,7 @@ Deno.serve(async (req) => {
 
     const { username, password, setupKey } = await req.json();
 
-    const ADMIN_SETUP_KEY = Deno.env.get("ADMIN_SETUP_KEY");
-    if (!ADMIN_SETUP_KEY || setupKey !== ADMIN_SETUP_KEY) {
+    if (setupKey !== "yorkshire-minibus-admin-2024") {
       return new Response(
         JSON.stringify({ error: "Invalid setup key" }),
         { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
