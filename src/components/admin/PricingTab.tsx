@@ -199,24 +199,36 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
     const timePremiums = editValues["time_premiums"] || {};
     const journeyPremiums = editValues["journey_type_premiums"] || {};
 
-    const timePremium = timePremiums[timePeriod] ?? 1.0;
-    const journeyPremium = journeyPremiums[journeyType] ?? 1.0;
+    const timeVals = Object.values(timePremiums).filter((v): v is number => typeof v === "number");
+    const journeyVals = Object.values(journeyPremiums).filter((v): v is number => typeof v === "number");
 
-    // Parse passenger count (take upper bound)
+    const lowestTime = timeVals.length ? Math.min(...timeVals) : 1;
+    const avgTime = timeVals.length ? timeVals.reduce((a, b) => a + b, 0) / timeVals.length : 1;
+    const highestTime = timeVals.length ? Math.max(...timeVals) : 1;
+
+    const lowestJourney = journeyVals.length ? Math.min(...journeyVals) : 1;
+    const avgJourney = journeyVals.length ? journeyVals.reduce((a, b) => a + b, 0) / journeyVals.length : 1;
+    const highestJourney = journeyVals.length ? Math.max(...journeyVals) : 1;
+
+    const selectedTimePremium = timePremiums[timePeriod] ?? 1.0;
+    const selectedJourneyPremium = journeyPremiums[journeyType] ?? 1.0;
+
     const match = passengers.match(/(\d+)$/);
     const pax = match ? parseInt(match[1]) : 8;
 
-    const fairPrice = (pax / maxCapacity) * distance * baseRate * timePremium * journeyPremium;
-    const minimumCharge = distance * minChargePerMile;
-    const finalPrice = Math.max(fairPrice, minimumCharge);
+    const calc = (tp: number, jp: number) => {
+      const fair = (pax / maxCapacity) * distance * baseRate * tp * jp;
+      const min = distance * minChargePerMile;
+      return Math.round(Math.max(fair, min) * 100) / 100;
+    };
 
     return {
-      finalPrice: Math.round(finalPrice * 100) / 100,
-      fairPrice: Math.round(fairPrice * 100) / 100,
-      minimumCharge: Math.round(minimumCharge * 100) / 100,
-      usedMinimum: minimumCharge > fairPrice,
-      timePremium,
-      journeyPremium,
+      selected: calc(selectedTimePremium, selectedJourneyPremium),
+      min: calc(lowestTime, lowestJourney),
+      avg: calc(avgTime, avgJourney),
+      max: calc(highestTime, highestJourney),
+      selectedTimePremium,
+      selectedJourneyPremium,
     };
   }, [distance, passengers, timePeriod, journeyType, editValues]);
 
@@ -235,7 +247,6 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Distance */}
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Distance (miles)</Label>
             <Input
@@ -246,48 +257,30 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
               className="bg-muted/50 border-border"
             />
           </div>
-
-          {/* Passengers */}
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Passengers</Label>
             <Select value={passengers} onValueChange={setPassengers}>
-              <SelectTrigger className="bg-muted/50 border-border">
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger className="bg-muted/50 border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {PASSENGER_OPTIONS.map((p) => (
-                  <SelectItem key={p} value={p}>{p}</SelectItem>
-                ))}
+                {PASSENGER_OPTIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
-
-          {/* Time */}
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Time of Day</Label>
             <Select value={timePeriod} onValueChange={setTimePeriod}>
-              <SelectTrigger className="bg-muted/50 border-border">
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger className="bg-muted/50 border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {TIME_OPTIONS.map((t) => (
-                  <SelectItem key={t} value={t}>{t}</SelectItem>
-                ))}
+                {TIME_OPTIONS.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
-
-          {/* Journey Type */}
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Journey Type</Label>
             <Select value={journeyType} onValueChange={setJourneyType}>
-              <SelectTrigger className="bg-muted/50 border-border">
-                <SelectValue />
-              </SelectTrigger>
+              <SelectTrigger className="bg-muted/50 border-border"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {JOURNEY_OPTIONS.map((j) => (
-                  <SelectItem key={j} value={j}>{j}</SelectItem>
-                ))}
+                {JOURNEY_OPTIONS.map((j) => <SelectItem key={j} value={j}>{j}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>
@@ -295,33 +288,35 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
 
         <Separator className="bg-border" />
 
-        {/* Result */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
-              <PoundSterling className="h-6 w-6 text-amber-500" />
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-foreground">£{result.finalPrice.toFixed(2)}</p>
-              <p className="text-xs text-muted-foreground">
-                {result.usedMinimum ? "Minimum charge applied" : "Standard calculation"}
-              </p>
-            </div>
+        {/* Selected price */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
+            <PoundSterling className="h-6 w-6 text-amber-500" />
           </div>
+          <div>
+            <p className="text-2xl font-bold text-foreground">£{result.selected.toFixed(2)}</p>
+            <p className="text-xs text-muted-foreground">
+              Selected: {timePeriod} ×{result.selectedTimePremium} · {journeyType} ×{result.selectedJourneyPremium}
+            </p>
+          </div>
+        </div>
 
-          <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-            <span className="px-2 py-1 rounded-md bg-muted">
-              Fair: £{result.fairPrice.toFixed(2)}
-            </span>
-            <span className="px-2 py-1 rounded-md bg-muted">
-              Min: £{result.minimumCharge.toFixed(2)}
-            </span>
-            <span className="px-2 py-1 rounded-md bg-muted">
-              Time ×{result.timePremium}
-            </span>
-            <span className="px-2 py-1 rounded-md bg-muted">
-              Journey ×{result.journeyPremium}
-            </span>
+        {/* Min / Avg / Max */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Min</p>
+            <p className="text-lg font-semibold text-blue-500">£{result.min.toFixed(2)}</p>
+            <p className="text-[10px] text-muted-foreground">Lowest premiums</p>
+          </div>
+          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Average</p>
+            <p className="text-lg font-semibold text-amber-500">£{result.avg.toFixed(2)}</p>
+            <p className="text-[10px] text-muted-foreground">Avg premiums</p>
+          </div>
+          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Max</p>
+            <p className="text-lg font-semibold text-rose-500">£{result.max.toFixed(2)}</p>
+            <p className="text-[10px] text-muted-foreground">Highest premiums</p>
           </div>
         </div>
       </CardContent>
