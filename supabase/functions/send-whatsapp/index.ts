@@ -98,8 +98,8 @@ Duration: ${formatDuration(durationMinutes)}
 💰 *Price*
 Estimated: £${estimatedPrice || "N/A"}
 
-Reply *ACCEPT* to confirm at this price.
-Reply *PRICE <amount>* to set a different price (e.g. PRICE 150).`;
+Would you like to accept this enquiry? Reply YES or NO.
+(Or reply PRICE <amount> to set a different price, e.g. PRICE 150)`;
 
     // ── Thank-you message to Client ─────────────────────────────────────
     const clientMessage = `Hi ${fullName}!
