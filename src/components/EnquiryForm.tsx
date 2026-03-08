@@ -506,11 +506,18 @@ const EnquiryForm = () => {
             </div>
           }
 
+          {/* Validation message */}
+          {validationErrors.length > 0 && (
+            <p className="mt-4 text-sm text-destructive font-medium">
+              Please fill in the highlighted fields before continuing.
+            </p>
+          )}
+
           {/* NAVIGATION */}
-          <div className="mt-8 flex justify-between">
+          <div className="mt-4 flex justify-between">
             {step > 1 ?
             <button
-              onClick={() => goToStep(step - 1)}
+              onClick={() => { setValidationErrors([]); goToStep(step - 1); }}
               className="px-6 py-2.5 text-sm transition-colors bg-muted text-navy rounded-xl font-semibold border-0">
               
                 Back
@@ -521,8 +528,8 @@ const EnquiryForm = () => {
 
             {step < 5 ?
             <button
-              onClick={() => goToStep(step + 1)}
-              disabled={step === 2 && pickupLocation && dropoffLocation && (routeLoading || !routeInfo)}
+              onClick={handleNext}
+              disabled={step === 2 && pickupLocation && dropoffLocation && (routeLoading || !routeInfo) ? true : false}
               className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted disabled:opacity-50 disabled:cursor-not-allowed">
               
                 {step === 2 && routeLoading ?
@@ -534,7 +541,11 @@ const EnquiryForm = () => {
               </button> :
 
             <button
-              onClick={handleSubmit}
+              onClick={() => {
+                const missing = validateStep(5);
+                if (missing.length > 0) { setValidationErrors(missing); return; }
+                handleSubmit();
+              }}
               disabled={submitting}
               className="px-8 py-2.5 text-sm font-semibold text-navy transition-colors bg-muted rounded-xl disabled:opacity-50 flex items-center gap-2">
               
