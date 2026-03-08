@@ -137,25 +137,25 @@ const EnquiriesTab = () => {
                 )}
               </div>
 
-              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs text-muted-foreground">
+              <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-muted-foreground">
                 {e.journey_type && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <span className="text-muted-foreground/70">Type:</span> {e.journey_type}
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <span className="text-muted-foreground/70">Type:</span> <span className="truncate">{e.journey_type}</span>
                   </div>
                 )}
                 {e.passengers && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <Users className="h-3 w-3" /> {e.passengers} passengers
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <Users className="h-3 w-3 shrink-0" /> {e.passengers} pax
                   </div>
                 )}
                 {e.date && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <Calendar className="h-3 w-3" /> {e.date}
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <Calendar className="h-3 w-3 shrink-0" /> {e.date}
                   </div>
                 )}
                 {e.distance_miles && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <MapPin className="h-3 w-3" /> {e.distance_miles} miles
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <MapPin className="h-3 w-3 shrink-0" /> {e.distance_miles} mi
                   </div>
                 )}
               </div>
