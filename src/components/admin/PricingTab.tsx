@@ -85,13 +85,13 @@ const PricingTab = () => {
   const simpleConfigs = configs.filter((c) => typeof c.config_value !== "object");
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-lg font-serif font-bold text-foreground">Pricing Configuration</h2>
-          <p className="text-xs text-muted-foreground">Adjust the premiums and rates used in price calculations.</p>
+          <h2 className="text-base sm:text-lg font-serif font-bold text-foreground">Pricing Configuration</h2>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Adjust the premiums and rates used in price calculations.</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={fetchConfigs} className="text-muted-foreground hover:text-gold">
+        <Button variant="ghost" size="sm" onClick={fetchConfigs} className="text-muted-foreground hover:text-gold self-start sm:self-auto">
           <RefreshCw className="h-4 w-4 mr-1" /> Refresh
         </Button>
       </div>
@@ -100,7 +100,7 @@ const PricingTab = () => {
       <PriceCalculator editValues={editValues} />
 
       {/* Simple values */}
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
         {simpleConfigs.map((cfg) => (
           <Card key={cfg.config_key} className="bg-muted/30 border-border">
             <CardHeader className="pb-3">
@@ -137,7 +137,7 @@ const PricingTab = () => {
             {cfg.description && <CardDescription className="text-xs">{cfg.description}</CardDescription>}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {Object.entries(editValues[cfg.config_key] || {}).map(([field, val]) => (
                 <div key={field}>
                   <Label className="text-xs text-muted-foreground">{field}</Label>
@@ -167,10 +167,10 @@ const PricingTab = () => {
 
       {/* Formula explanation */}
       <Card className="bg-muted/20 border-border">
-        <CardContent className="p-5">
-          <p className="text-xs text-muted-foreground font-mono">
+        <CardContent className="p-3 sm:p-5">
+          <p className="text-[10px] sm:text-xs text-muted-foreground font-mono break-all">
             <strong className="text-foreground/60">Formula:</strong>{" "}
-            price = max( (passengers / max_capacity) × distance × base_rate × time_premium × journey_premium , distance × minimum_charge_per_mile )
+            price = max( (pax / capacity) × dist × rate × time × journey , dist × min_per_mile )
           </p>
         </CardContent>
       </Card>
@@ -246,7 +246,7 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
         </div>
       </CardHeader>
       <CardContent className="space-y-5">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Distance (miles)</Label>
             <Input
@@ -289,34 +289,34 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
         <Separator className="bg-border" />
 
         {/* Selected price */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
-            <PoundSterling className="h-6 w-6 text-amber-500" />
+        <div className="flex items-center gap-2 sm:gap-3 mb-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+            <PoundSterling className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-foreground">£{result.selected.toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground">
-              Selected: {timePeriod} ×{result.selectedTimePremium} · {journeyType} ×{result.selectedJourneyPremium}
+            <p className="text-xl sm:text-2xl font-bold text-foreground">£{result.selected.toFixed(2)}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {timePeriod} ×{result.selectedTimePremium} · {journeyType} ×{result.selectedJourneyPremium}
             </p>
           </div>
         </div>
 
         {/* Min / Avg / Max */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Min</p>
-            <p className="text-lg font-semibold text-blue-500">£{result.min.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Lowest premiums</p>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Min</p>
+            <p className="text-base sm:text-lg font-semibold text-blue-500">£{result.min.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Lowest premiums</p>
           </div>
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Average</p>
-            <p className="text-lg font-semibold text-amber-500">£{result.avg.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Avg premiums</p>
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Average</p>
+            <p className="text-base sm:text-lg font-semibold text-amber-500">£{result.avg.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Avg premiums</p>
           </div>
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Max</p>
-            <p className="text-lg font-semibold text-rose-500">£{result.max.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Highest premiums</p>
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Max</p>
+            <p className="text-base sm:text-lg font-semibold text-rose-500">£{result.max.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Highest premiums</p>
           </div>
         </div>
       </CardContent>

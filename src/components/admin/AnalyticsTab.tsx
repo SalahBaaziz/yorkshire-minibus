@@ -108,22 +108,22 @@ const AnalyticsTab = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
         {kpis.map((kpi, i) => {
           const style = KPI_STYLES[i];
           return (
             <Card key={kpi.label} className="border-border">
-              <CardContent className="p-5">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2.5 rounded-lg ${style.bg}`}>
-                    <style.icon className={`h-5 w-5 ${style.text}`} />
+              <CardContent className="p-3 sm:p-5">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className={`p-1.5 sm:p-2.5 rounded-lg ${style.bg} shrink-0`}>
+                    <style.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${style.text}`} />
                   </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground">{kpi.label}</p>
-                    <p className="text-2xl font-bold text-foreground">{kpi.value}</p>
-                    <p className="text-[11px] text-muted-foreground">{kpi.sub}</p>
+                  <div className="min-w-0">
+                    <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{kpi.label}</p>
+                    <p className="text-lg sm:text-2xl font-bold text-foreground">{kpi.value}</p>
+                    <p className="text-[9px] sm:text-[11px] text-muted-foreground">{kpi.sub}</p>
                   </div>
                 </div>
               </CardContent>
@@ -134,11 +134,11 @@ const AnalyticsTab = () => {
 
       {/* Enquiries Over Time */}
       <Card className="border-border">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold">Enquiries Over Time</CardTitle>
+        <CardHeader className="pb-2 px-3 sm:px-6">
+          <CardTitle className="text-xs sm:text-sm font-semibold">Enquiries Over Time</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[280px] w-full">
+        <CardContent className="px-1 sm:px-6">
+          <ChartContainer config={chartConfig} className="h-[200px] sm:h-[280px] w-full">
             <AreaChart data={enquiriesOverTime}>
               <defs>
                 <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
@@ -156,14 +156,14 @@ const AnalyticsTab = () => {
         </CardContent>
       </Card>
 
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
         {/* Journey Type Pie */}
         <Card className="border-border">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold">Journey Types</CardTitle>
+          <CardHeader className="pb-2 px-3 sm:px-6">
+            <CardTitle className="text-xs sm:text-sm font-semibold">Journey Types</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-[280px] w-full">
+          <CardContent className="px-1 sm:px-6">
+            <div className="h-[220px] sm:h-[280px] w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -199,11 +199,11 @@ const AnalyticsTab = () => {
 
         {/* Status Breakdown */}
         <Card className="border-border">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold">Status Breakdown</CardTitle>
+          <CardHeader className="pb-2 px-3 sm:px-6">
+            <CardTitle className="text-xs sm:text-sm font-semibold">Status Breakdown</CardTitle>
           </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig} className="h-[280px] w-full">
+          <CardContent className="px-1 sm:px-6">
+            <ChartContainer config={chartConfig} className="h-[220px] sm:h-[280px] w-full">
               <BarChart data={statusData} layout="vertical" barCategoryGap="20%">
                 <CartesianGrid strokeDasharray="3 3" className="stroke-border" horizontal={false} />
                 <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} axisLine={false} tickLine={false} />

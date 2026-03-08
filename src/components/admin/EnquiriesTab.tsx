@@ -80,9 +80,9 @@ const EnquiriesTab = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
         {[
           { label: "Total", value: enquiries.length, color: "text-foreground" },
           { label: "Pending", value: enquiries.filter((e) => e.status === "pending").length, color: "text-yellow-600 dark:text-yellow-300" },
@@ -90,9 +90,9 @@ const EnquiriesTab = () => {
           { label: "Paid", value: enquiries.filter((e) => e.payment_status === "paid").length, color: "text-gold" },
         ].map((s) => (
           <Card key={s.label} className="bg-muted/50 border-border">
-            <CardContent className="p-4">
-              <p className="text-xs text-muted-foreground">{s.label}</p>
-              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+            <CardContent className="p-3 sm:p-4">
+              <p className="text-[10px] sm:text-xs text-muted-foreground">{s.label}</p>
+              <p className={`text-xl sm:text-2xl font-bold ${s.color}`}>{s.value}</p>
             </CardContent>
           </Card>
         ))}
@@ -110,52 +110,52 @@ const EnquiriesTab = () => {
       </div>
 
       {/* Enquiry cards */}
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         {filtered.map((e) => (
           <Card key={e.id} className="bg-card border-border hover:border-primary/30 transition-colors">
-            <CardContent className="p-5">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-foreground">{e.full_name}</h3>
-                    <Badge variant="outline" className={statusColors[e.status] || ""}>{e.status}</Badge>
-                    <Badge variant="outline" className={paymentColors[e.payment_status || "unpaid"] || ""}>
+            <CardContent className="p-3 sm:p-5">
+              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-3">
+                <div className="space-y-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <h3 className="font-semibold text-foreground text-sm sm:text-base truncate">{e.full_name}</h3>
+                    <Badge variant="outline" className={`text-[10px] sm:text-xs ${statusColors[e.status] || ""}`}>{e.status}</Badge>
+                    <Badge variant="outline" className={`text-[10px] sm:text-xs ${paymentColors[e.payment_status || "unpaid"] || ""}`}>
                       {e.payment_status || "unpaid"}
                     </Badge>
                   </div>
-                  <div className="flex flex-wrap gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{e.email}</span>
-                    <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{e.phone}</span>
-                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{formatDate(e.created_at)}</span>
+                  <div className="flex flex-col sm:flex-row sm:flex-wrap gap-1 sm:gap-4 text-[10px] sm:text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1 truncate"><Mail className="h-3 w-3 shrink-0" />{e.email}</span>
+                    <span className="flex items-center gap-1"><Phone className="h-3 w-3 shrink-0" />{e.phone}</span>
+                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3 shrink-0" />{formatDate(e.created_at)}</span>
                   </div>
                 </div>
                 {e.estimated_price && (
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">Est. Price</p>
-                    <p className="text-xl font-bold text-gold">£{e.estimated_price}</p>
+                  <div className="text-left sm:text-right shrink-0">
+                    <p className="text-[10px] sm:text-xs text-muted-foreground">Est. Price</p>
+                    <p className="text-lg sm:text-xl font-bold text-gold">£{e.estimated_price}</p>
                   </div>
                 )}
               </div>
 
-              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs text-muted-foreground">
+              <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-muted-foreground">
                 {e.journey_type && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <span className="text-muted-foreground/70">Type:</span> {e.journey_type}
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <span className="text-muted-foreground/70">Type:</span> <span className="truncate">{e.journey_type}</span>
                   </div>
                 )}
                 {e.passengers && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <Users className="h-3 w-3" /> {e.passengers} passengers
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <Users className="h-3 w-3 shrink-0" /> {e.passengers} pax
                   </div>
                 )}
                 {e.date && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <Calendar className="h-3 w-3" /> {e.date}
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <Calendar className="h-3 w-3 shrink-0" /> {e.date}
                   </div>
                 )}
                 {e.distance_miles && (
-                  <div className="flex items-center gap-1.5 bg-muted/50 rounded px-2.5 py-1.5">
-                    <MapPin className="h-3 w-3" /> {e.distance_miles} miles
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-muted/50 rounded px-2 py-1 sm:px-2.5 sm:py-1.5">
+                    <MapPin className="h-3 w-3 shrink-0" /> {e.distance_miles} mi
                   </div>
                 )}
               </div>
