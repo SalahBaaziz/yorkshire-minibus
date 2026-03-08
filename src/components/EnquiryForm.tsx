@@ -198,7 +198,7 @@ const EnquiryForm = () => {
                 <h3 className="font-serif text-lg font-bold text-primary-foreground">
                   Journey Details
                 </h3>
-                <p className="text-sm text-primary-foreground/60 mt-1">
+                <p className="text-sm text-primary-foreground/80 mt-1">
                   What kind of trip are you planning?
                 </p>
               </div>
