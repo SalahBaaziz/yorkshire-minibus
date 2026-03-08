@@ -7,6 +7,7 @@ import LocationAutocomplete, { type LocationResult } from "./LocationAutocomplet
 import RouteMap, { type RouteInfo } from "./RouteMap";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Calendar } from "./ui/calendar";
+import RouteInfoDisplay from "./RouteInfo";
 
 const journeyTypes = [
 "Wedding",
