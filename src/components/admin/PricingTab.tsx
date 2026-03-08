@@ -137,7 +137,7 @@ const PricingTab = () => {
             {cfg.description && <CardDescription className="text-xs">{cfg.description}</CardDescription>}
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {Object.entries(editValues[cfg.config_key] || {}).map(([field, val]) => (
                 <div key={field}>
                   <Label className="text-xs text-muted-foreground">{field}</Label>
