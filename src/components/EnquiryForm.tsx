@@ -330,7 +330,7 @@ const EnquiryForm = () => {
                 <PopoverTrigger asChild>
                   <button
                     type="button"
-                    className={cn(inputClass, "flex items-center justify-between text-left")}>
+                    className={cn(inputClass, "flex items-center justify-between text-left", validationErrors.includes("date") && errorBorderClass)}>
                     
                     {formData.date ? format(new Date(formData.date + "T00:00:00"), "d MMM yyyy") : <span className="text-primary-foreground/40">Select a date</span>}
                     <CalendarIcon className="h-4 w-4 text-primary-foreground/40" />
