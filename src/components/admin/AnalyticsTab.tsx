@@ -36,6 +36,7 @@ const KPI_STYLES = [
 const AnalyticsTab = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     supabase
