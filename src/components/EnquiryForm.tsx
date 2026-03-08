@@ -44,6 +44,7 @@ const EnquiryForm = () => {
   const [pickupLocation, setPickupLocation] = useState<LocationResult | null>(null);
   const [dropoffLocation, setDropoffLocation] = useState<LocationResult | null>(null);
   const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
+  const [routeLoading, setRouteLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
