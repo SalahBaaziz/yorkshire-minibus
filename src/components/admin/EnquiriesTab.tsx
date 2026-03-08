@@ -80,9 +80,9 @@ const EnquiriesTab = () => {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3 sm:space-y-4">
       {/* Stats row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
         {[
           { label: "Total", value: enquiries.length, color: "text-foreground" },
           { label: "Pending", value: enquiries.filter((e) => e.status === "pending").length, color: "text-yellow-600 dark:text-yellow-300" },
@@ -90,9 +90,9 @@ const EnquiriesTab = () => {
           { label: "Paid", value: enquiries.filter((e) => e.payment_status === "paid").length, color: "text-gold" },
         ].map((s) => (
           <Card key={s.label} className="bg-muted/50 border-border">
-            <CardContent className="p-4">
-              <p className="text-xs text-muted-foreground">{s.label}</p>
-              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+            <CardContent className="p-3 sm:p-4">
+              <p className="text-[10px] sm:text-xs text-muted-foreground">{s.label}</p>
+              <p className={`text-xl sm:text-2xl font-bold ${s.color}`}>{s.value}</p>
             </CardContent>
           </Card>
         ))}
