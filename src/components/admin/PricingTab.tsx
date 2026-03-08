@@ -289,14 +289,14 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
         <Separator className="bg-border" />
 
         {/* Selected price */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-12 w-12 rounded-xl bg-amber-500/10 flex items-center justify-center">
-            <PoundSterling className="h-6 w-6 text-amber-500" />
+        <div className="flex items-center gap-2 sm:gap-3 mb-4">
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-amber-500/10 flex items-center justify-center shrink-0">
+            <PoundSterling className="h-5 w-5 sm:h-6 sm:w-6 text-amber-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-foreground">£{result.selected.toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground">
-              Selected: {timePeriod} ×{result.selectedTimePremium} · {journeyType} ×{result.selectedJourneyPremium}
+            <p className="text-xl sm:text-2xl font-bold text-foreground">£{result.selected.toFixed(2)}</p>
+            <p className="text-[10px] sm:text-xs text-muted-foreground">
+              {timePeriod} ×{result.selectedTimePremium} · {journeyType} ×{result.selectedJourneyPremium}
             </p>
           </div>
         </div>
