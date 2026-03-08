@@ -134,11 +134,11 @@ const AnalyticsTab = () => {
 
       {/* Enquiries Over Time */}
       <Card className="border-border">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-semibold">Enquiries Over Time</CardTitle>
+        <CardHeader className="pb-2 px-3 sm:px-6">
+          <CardTitle className="text-xs sm:text-sm font-semibold">Enquiries Over Time</CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={chartConfig} className="h-[280px] w-full">
+        <CardContent className="px-1 sm:px-6">
+          <ChartContainer config={chartConfig} className="h-[200px] sm:h-[280px] w-full">
             <AreaChart data={enquiriesOverTime}>
               <defs>
                 <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
