@@ -85,13 +85,13 @@ const PricingTab = () => {
   const simpleConfigs = configs.filter((c) => typeof c.config_value !== "object");
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h2 className="text-lg font-serif font-bold text-foreground">Pricing Configuration</h2>
-          <p className="text-xs text-muted-foreground">Adjust the premiums and rates used in price calculations.</p>
+          <h2 className="text-base sm:text-lg font-serif font-bold text-foreground">Pricing Configuration</h2>
+          <p className="text-[10px] sm:text-xs text-muted-foreground">Adjust the premiums and rates used in price calculations.</p>
         </div>
-        <Button variant="ghost" size="sm" onClick={fetchConfigs} className="text-muted-foreground hover:text-gold">
+        <Button variant="ghost" size="sm" onClick={fetchConfigs} className="text-muted-foreground hover:text-gold self-start sm:self-auto">
           <RefreshCw className="h-4 w-4 mr-1" /> Refresh
         </Button>
       </div>
