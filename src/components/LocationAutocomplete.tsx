@@ -13,6 +13,7 @@ interface LocationAutocompleteProps {
   placeholder: string;
   value: LocationResult | null;
   onChange: (location: LocationResult | null) => void;
+  hasError?: boolean;
 }
 
 const PHOTON_URL = "https://photon.komoot.io/api";
