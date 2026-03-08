@@ -96,6 +96,9 @@ const PricingTab = () => {
         </Button>
       </div>
 
+      {/* Live Calculator */}
+      <PriceCalculator editValues={editValues} />
+
       {/* Simple values */}
       <div className="grid sm:grid-cols-2 gap-4">
         {simpleConfigs.map((cfg) => (
