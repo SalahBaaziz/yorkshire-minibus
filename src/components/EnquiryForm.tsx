@@ -357,8 +357,9 @@ const EnquiryForm = () => {
           
             {returnJourney &&
             <div>
-              <label className={labelClass}>Return pick-up time</label>
+              <label htmlFor="returnTime" className={labelClass}>Return pick-up time</label>
               <select
+                id="returnTime"
                 className={inputClass}
                 value={formData.returnTime}
                 onChange={(e) => update("returnTime", e.target.value)}>
