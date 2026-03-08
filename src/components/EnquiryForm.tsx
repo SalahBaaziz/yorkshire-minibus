@@ -492,7 +492,7 @@ const EnquiryForm = () => {
               <div>
                 <label className="text-primary-foreground">Phone Number</label>
                 <input
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("phone") && errorBorderClass)}
                 type="tel"
                 placeholder="e.g. 07700 900000"
                 value={formData.phone}
