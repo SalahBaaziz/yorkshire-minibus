@@ -466,7 +466,7 @@ const EnquiryForm = () => {
 
             {step < 5 ?
             <button
-              onClick={() => setStep(step + 1)}
+              onClick={() => goToStep(step + 1)}
               className="px-6 py-2.5 text-sm font-semibold text-navy transition-colors rounded-xl bg-muted">
               
                 Next
