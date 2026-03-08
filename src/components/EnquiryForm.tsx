@@ -1,8 +1,12 @@
 import { useState, useRef, useCallback } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import LocationAutocomplete, { type LocationResult } from "./LocationAutocomplete";
 import RouteMap, { type RouteInfo } from "./RouteMap";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
 import RouteInfoDisplay from "./RouteInfo";
 
 const journeyTypes = [
@@ -280,12 +284,27 @@ const EnquiryForm = () => {
           
             <div>
               <label className={labelClass}>Date of travel</label>
-              <input
-                className={inputClass}
-                type="date"
-                value={formData.date}
-                onChange={(e) => update("date", e.target.value)} />
-              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    type="button"
+                    className={cn(inputClass, "flex items-center justify-between text-left")}
+                  >
+                    {formData.date ? format(new Date(formData.date + "T00:00:00"), "d MMM yyyy") : <span className="text-primary-foreground/40">Select a date</span>}
+                    <CalendarIcon className="h-4 w-4 text-primary-foreground/40" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={formData.date ? new Date(formData.date + "T00:00:00") : undefined}
+                    onSelect={(date) => update("date", date ? format(date, "yyyy-MM-dd") : "")}
+                    disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           
             <div>
