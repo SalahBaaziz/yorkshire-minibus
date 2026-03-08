@@ -261,7 +261,7 @@ function formatDate(dateStr: string | null): string {
 function buildClientOffer(enquiry: any, price: number | null): string {
   return `Hi ${enquiry.full_name}!
 
-Great news — *Yorkshire Minibus* has come back with a quote for your trip:
+Great news — Yorkshire Minibus has come back with a quote for your trip:
 
 📋 *Journey Details*
 ${enquiry.journey_type || "Minibus"} journey
@@ -269,10 +269,10 @@ ${formatDate(enquiry.date)} at ${enquiry.pickup_time || "TBC"}
 ${enquiry.pickup_address || "TBC"} → ${enquiry.dropoff_address || "TBC"}
 ${enquiry.passengers || "N/A"} passengers
 
-💰 *Price: £${price || "TBC"}*
+💰 *Price*
+£${price || "TBC"}
 
-Reply *CONFIRM* to accept and book.
-Reply *REJECT* if you'd like to decline.`;
+Would you like to confirm this booking? Reply YES or NO.`;
 }
 
 async function sendWhatsApp(
