@@ -245,7 +245,7 @@ const EnquiryForm = () => {
                 <label htmlFor="journeyType" className={labelClass}>What's the occasion?</label>
                 <select
                 id="journeyType"
-                className={inputClass}
+                className={cn(inputClass, validationErrors.includes("journeyType") && errorBorderClass)}
                 value={formData.journeyType}
                 onChange={(e) => update("journeyType", e.target.value)}>
                 
