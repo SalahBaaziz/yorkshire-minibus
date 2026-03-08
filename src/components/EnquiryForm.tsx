@@ -330,7 +330,7 @@ const EnquiryForm = () => {
           
                 <button
                   type="button"
-                  onClick={() => setReturnJourney(true)} className="bg-muted rounded-3xl">
+                  onClick={() => setReturnJourney(true)} className={`rounded-3xl ${returnJourney ? "bg-gold text-navy" : "bg-muted text-primary-foreground"}`}>
 
 
 
