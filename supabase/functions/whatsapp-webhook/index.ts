@@ -54,10 +54,10 @@ Deno.serve(async (req) => {
       await supabase.from("enquiries").update({ status: "offered" }).eq("id", enquiry.id);
 
       const clientPhone = formatClientPhone(enquiry.phone);
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         clientPhone, buildClientOffer(enquiry, enquiry.estimated_price));
 
-      await sendSMS(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
+      await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
         `Price of £${enquiry.estimated_price} sent to ${enquiry.full_name} for confirmation.`);
 
       return new Response(emptyTwiml, { status: 200, headers: xmlHeaders });
