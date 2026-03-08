@@ -119,7 +119,7 @@ const LocationAutocomplete = ({ label, placeholder, value, onChange, hasError }:
   };
 
   const inputClass =
-    "w-full rounded-lg border border-navy-light/30 bg-navy-light/20 px-4 py-3 pl-10 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50";
+    `w-full rounded-lg border ${hasError ? "border-destructive ring-2 ring-destructive/50" : "border-navy-light/30"} bg-navy-light/20 px-4 py-3 pl-10 text-sm text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold/50`;
 
   return (
     <div ref={wrapperRef} className="relative">
