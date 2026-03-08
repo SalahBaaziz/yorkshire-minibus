@@ -99,13 +99,13 @@ Deno.serve(async (req) => {
       await supabase.from("enquiries").update({ status: "confirmed" }).eq("id", enquiry.id);
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER, from,
-        `🎉 *Booking Confirmed!*
+        `*Booking Confirmed!*
 
 Your ${enquiry.journey_type || "minibus"} trip on *${formatDate(enquiry.date)}* is locked in at *£${enquiry.estimated_price}*.
 
-💳 We'll be in touch with payment details shortly.
+We'll be in touch with payment details shortly.
 
-Thank you for choosing *Yorkshire Minibus*! 🚐`);
+Thank you for choosing *Yorkshire Minibus*!`);
 
       await sendWhatsApp(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_WHATSAPP_NUMBER,
         BUSINESS_WHATSAPP_NUMBER,
