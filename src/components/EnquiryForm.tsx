@@ -330,25 +330,15 @@ const EnquiryForm = () => {
           
                 <button
                   type="button"
-                  onClick={() => setReturnJourney(true)} className={`rounded-3xl ${returnJourney ? "bg-gold text-navy" : "bg-muted text-primary-foreground"}`}>
-
-
-
-
-                  
-                  
+                  onClick={() => setReturnJourney(true)}
+                  className={`rounded-3xl text-primary-foreground ${returnJourney ? "bg-gold-dark border-2 border-gold" : "bg-navy-light/30 border-2 border-transparent"}`}>
                   Yes
                 </button>
-          
+
                 <button
                   type="button"
-                  onClick={() => setReturnJourney(false)} className={`rounded-3xl ${!returnJourney ? "bg-gold text-navy" : "bg-muted text-primary-foreground"}`}>
-
-
-
-
-                  
-                  
+                  onClick={() => setReturnJourney(false)}
+                  className={`rounded-3xl text-primary-foreground ${!returnJourney ? "bg-gold-dark border-2 border-gold" : "bg-navy-light/30 border-2 border-transparent"}`}>
                   No
                 </button>
           
