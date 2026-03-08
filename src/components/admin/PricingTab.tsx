@@ -302,21 +302,21 @@ function PriceCalculator({ editValues }: { editValues: Record<string, any> }) {
         </div>
 
         {/* Min / Avg / Max */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Min</p>
-            <p className="text-lg font-semibold text-blue-500">£{result.min.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Lowest premiums</p>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Min</p>
+            <p className="text-base sm:text-lg font-semibold text-blue-500">£{result.min.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Lowest premiums</p>
           </div>
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Average</p>
-            <p className="text-lg font-semibold text-amber-500">£{result.avg.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Avg premiums</p>
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Average</p>
+            <p className="text-base sm:text-lg font-semibold text-amber-500">£{result.avg.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Avg premiums</p>
           </div>
-          <div className="rounded-lg border border-border bg-muted/30 p-3 text-center">
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Max</p>
-            <p className="text-lg font-semibold text-rose-500">£{result.max.toFixed(2)}</p>
-            <p className="text-[10px] text-muted-foreground">Highest premiums</p>
+          <div className="rounded-lg border border-border bg-muted/30 p-2 sm:p-3 text-center">
+            <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">Max</p>
+            <p className="text-base sm:text-lg font-semibold text-rose-500">£{result.max.toFixed(2)}</p>
+            <p className="text-[9px] sm:text-[10px] text-muted-foreground hidden sm:block">Highest premiums</p>
           </div>
         </div>
       </CardContent>
