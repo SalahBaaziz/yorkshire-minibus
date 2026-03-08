@@ -54,13 +54,13 @@ Deno.serve(async (req) => {
       return `${parseInt(d)} ${months[parseInt(m) - 1]} ${y}`;
     };
 
-    // Helper to send an SMS via Twilio
-    const sendSMS = async (to: string, body: string) => {
+    // Helper to send a WhatsApp message via Twilio
+    const sendWhatsApp = async (to: string, body: string) => {
       const url = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`;
 
       const params = new URLSearchParams();
-      params.append("From", TWILIO_WHATSAPP_NUMBER);
-      params.append("To", to);
+      params.append("From", `whatsapp:${TWILIO_WHATSAPP_NUMBER}`);
+      params.append("To", `whatsapp:${to}`);
       params.append("Body", body);
 
       const res = await fetch(url, {
