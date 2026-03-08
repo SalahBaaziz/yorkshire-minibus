@@ -1,0 +1,185 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Search, Users, Calendar, MapPin, Phone, Mail } from "lucide-react";
+
+interface Enquiry {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  journey_type: string | null;
+  passengers: string | null;
+  pickup_address: string | null;
+  dropoff_address: string | null;
+  date: string | null;
+  pickup_time: string | null;
+  return_journey: boolean | null;
+  return_time: string | null;
+  distance_miles: number | null;
+  duration_minutes: number | null;
+  estimated_price: number | null;
+  status: string;
+  payment_status: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+const statusColors: Record<string, string> = {
+  pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+  offered: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+  confirmed: "bg-green-500/20 text-green-300 border-green-500/30",
+  rejected: "bg-red-500/20 text-red-300 border-red-500/30",
+};
+
+const paymentColors: Record<string, string> = {
+  unpaid: "bg-red-500/20 text-red-300 border-red-500/30",
+  processing: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
+  paid: "bg-green-500/20 text-green-300 border-green-500/30",
+};
+
+const EnquiriesTab = () => {
+  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    fetchEnquiries();
+  }, []);
+
+  const fetchEnquiries = async () => {
+    const { data, error } = await supabase
+      .from("enquiries")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setEnquiries(data as Enquiry[]);
+    setLoading(false);
+  };
+
+  const filtered = enquiries.filter((e) => {
+    const q = search.toLowerCase();
+    return (
+      e.full_name.toLowerCase().includes(q) ||
+      e.email.toLowerCase().includes(q) ||
+      e.phone.includes(q) ||
+      (e.journey_type?.toLowerCase().includes(q) ?? false)
+    );
+  });
+
+  const formatDate = (d: string) => {
+    return new Date(d).toLocaleDateString("en-GB", {
+      day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit",
+    });
+  };
+
+  if (loading) {
+    return <div className="text-primary-foreground/50 text-center py-12">Loading enquiries…</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Stats row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Total", value: enquiries.length, color: "text-primary-foreground" },
+          { label: "Pending", value: enquiries.filter((e) => e.status === "pending").length, color: "text-yellow-300" },
+          { label: "Confirmed", value: enquiries.filter((e) => e.status === "confirmed").length, color: "text-green-300" },
+          { label: "Paid", value: enquiries.filter((e) => e.payment_status === "paid").length, color: "text-gold" },
+        ].map((s) => (
+          <Card key={s.label} className="bg-navy-light/20 border-navy-light/30">
+            <CardContent className="p-4">
+              <p className="text-xs text-primary-foreground/50">{s.label}</p>
+              <p className={`text-2xl font-bold ${s.color}`}>{s.value}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary-foreground/40" />
+        <Input
+          placeholder="Search by name, email, phone, type…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="pl-10 bg-navy-light/20 border-navy-light/30 text-primary-foreground placeholder:text-primary-foreground/30"
+        />
+      </div>
+
+      {/* Enquiry cards */}
+      <div className="space-y-3">
+        {filtered.map((e) => (
+          <Card key={e.id} className="bg-navy-light/10 border-navy-light/20 hover:border-gold/30 transition-colors">
+            <CardContent className="p-5">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold text-primary-foreground">{e.full_name}</h3>
+                    <Badge variant="outline" className={statusColors[e.status] || ""}>{e.status}</Badge>
+                    <Badge variant="outline" className={paymentColors[e.payment_status || "unpaid"] || ""}>
+                      {e.payment_status || "unpaid"}
+                    </Badge>
+                  </div>
+                  <div className="flex flex-wrap gap-4 text-xs text-primary-foreground/50">
+                    <span className="flex items-center gap-1"><Mail className="h-3 w-3" />{e.email}</span>
+                    <span className="flex items-center gap-1"><Phone className="h-3 w-3" />{e.phone}</span>
+                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{formatDate(e.created_at)}</span>
+                  </div>
+                </div>
+                {e.estimated_price && (
+                  <div className="text-right">
+                    <p className="text-xs text-primary-foreground/50">Est. Price</p>
+                    <p className="text-xl font-bold text-gold">£{e.estimated_price}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-xs text-primary-foreground/60">
+                {e.journey_type && (
+                  <div className="flex items-center gap-1.5 bg-navy-light/20 rounded px-2.5 py-1.5">
+                    <span className="text-primary-foreground/40">Type:</span> {e.journey_type}
+                  </div>
+                )}
+                {e.passengers && (
+                  <div className="flex items-center gap-1.5 bg-navy-light/20 rounded px-2.5 py-1.5">
+                    <Users className="h-3 w-3" /> {e.passengers} passengers
+                  </div>
+                )}
+                {e.date && (
+                  <div className="flex items-center gap-1.5 bg-navy-light/20 rounded px-2.5 py-1.5">
+                    <Calendar className="h-3 w-3" /> {e.date}
+                  </div>
+                )}
+                {e.distance_miles && (
+                  <div className="flex items-center gap-1.5 bg-navy-light/20 rounded px-2.5 py-1.5">
+                    <MapPin className="h-3 w-3" /> {e.distance_miles} miles
+                  </div>
+                )}
+              </div>
+
+              {(e.pickup_address || e.dropoff_address) && (
+                <div className="mt-2 text-xs text-primary-foreground/50 space-y-0.5">
+                  {e.pickup_address && <p><strong className="text-primary-foreground/60">From:</strong> {e.pickup_address}</p>}
+                  {e.dropoff_address && <p><strong className="text-primary-foreground/60">To:</strong> {e.dropoff_address}</p>}
+                </div>
+              )}
+
+              {e.notes && (
+                <p className="mt-2 text-xs text-primary-foreground/40 italic">"{e.notes}"</p>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+
+        {filtered.length === 0 && (
+          <p className="text-center text-primary-foreground/40 py-12">No enquiries found.</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default EnquiriesTab;
