@@ -43,6 +43,7 @@ const EnquiryForm = () => {
     journeyType: "",
     date: "",
     time: "",
+    pickupTime: "",
     passengers: "",
     returnTime: "",
     notes: ""
